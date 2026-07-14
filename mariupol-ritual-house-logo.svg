@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 220"
+     width="1200"
+     height="220"
+     role="img"
+     aria-labelledby="title desc">
+  <title id="title">Мариупольский ритуальный дом</title>
+  <desc id="desc">Логотип: классическое здание слева и название компании в две строки справа</desc>
+
+  <g fill="#6e5a45">
+    <g transform="translate(24 24)">
+      <path d="M20 54L96 10L172 54H20Z"/>
+      <rect x="34" y="66" width="36" height="12" rx="1"/>
+      <rect x="78" y="66" width="36" height="12" rx="1"/>
+      <rect x="122" y="66" width="36" height="12" rx="1"/>
+      <rect x="40" y="78" width="24" height="82" rx="1"/>
+      <rect x="84" y="78" width="24" height="82" rx="1"/>
+      <rect x="128" y="78" width="24" height="82" rx="1"/>
+      <rect x="32" y="160" width="40" height="10" rx="1"/>
+      <rect x="76" y="160" width="40" height="10" rx="1"/>
+      <rect x="120" y="160" width="40" height="10" rx="1"/>
+      <rect x="20" y="180" width="152" height="14" rx="1"/>
+    </g>
+
+    <g font-family="Georgia, 'Times New Roman', serif" font-weight="700">
+      <text x="235" y="92" font-size="58">Мариупольский</text>
+      <text x="235" y="164" font-size="58">ритуальный дом</text>
+    </g>
+  </g>
+</svg>

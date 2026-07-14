@@ -1,0 +1,7 @@
+.nuxt
+.output
+docs
+node_modules
+package-lock.json
+README.md
+TODO_ритуальный_сайт_Мариуполь.md
