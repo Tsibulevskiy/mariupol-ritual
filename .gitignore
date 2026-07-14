@@ -4,7 +4,7 @@
 .nuxt
 .nitro
 .cache
-
+.docs
 dist
 
 # Node dependencies
@@ -24,3 +24,5 @@ logs
 .env.*
 !.env.example
 AGENTS.md
+/docs/
+/artifacts/
