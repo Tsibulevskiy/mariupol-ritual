@@ -1,9 +1,9 @@
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  const yandexMetrikaId = config.public.yandexMetrikaId?.trim()
-  const yandexVerification = config.public.yandexVerification?.trim()
-  const googleSiteVerification = config.public.googleSiteVerification?.trim()
-  const gaMeasurementId = config.public.gaMeasurementId?.trim()
+  const yandexMetrikaId = String(config.public.yandexMetrikaId || '').trim()
+  const yandexVerification = String(config.public.yandexVerification || '').trim()
+  const googleSiteVerification = String(config.public.googleSiteVerification || '').trim()
+  const gaMeasurementId = String(config.public.gaMeasurementId || '').trim()
 
   const trackEvent = (eventName: string) => {
     const analyticsWindow = window as Window & {
