@@ -189,6 +189,14 @@ const organizationSteps = [
 
 const specialists = [
   {
+    id: 'victoria-second',
+    name: 'Виктория',
+    role: 'Менеджер по работе с клиентами',
+    initials: 'В',
+    phone: '+7 949 708 23 55',
+    image: '/victoria1.png',
+  },
+  {
     id: 'viktoriya',
     name: 'Ирина',
     role: 'Менеджер по работе с клиентами',
@@ -211,14 +219,6 @@ const specialists = [
     initials: 'Е',
     phone: '+7 949 551 37 12',
     image: '/Ekaterina.png',
-  },
-  {
-    id: 'victoria-second',
-    name: 'Виктория',
-    role: 'Менеджер по работе с клиентами',
-    initials: 'В',
-    phone: '+7 949 708 23 55',
-    image: '/victoria1.png',
   },
 ]
 
@@ -329,6 +329,57 @@ useSchemaOrg([
 <template>
   <div>
     <HomeHeroSection />
+
+    <section class="section bg-[#DDE7F0]">
+      <BaseContainer>
+        <SectionHeading
+          title="С вами будут работать"
+          description="Наши специалисты спокойно ответят на вопросы, объяснят порядок действий и помогут организовать всё необходимое."
+        />
+        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <BaseCard
+            v-for="specialist in specialists"
+            :key="specialist.id"
+            class="flex h-full flex-col items-center text-center shadow-[0_10px_30px_rgba(12,30,50,0.08)]"
+          >
+            <NuxtImg
+              v-if="specialist.image"
+              :src="specialist.image"
+              :alt="specialist.name"
+              width="160"
+              height="160"
+              class="size-40 rounded-full object-cover"
+              loading="lazy"
+            />
+            <div
+              v-else
+              class="flex size-40 items-center justify-center rounded-full bg-surface-alt font-heading text-5xl text-primary"
+              aria-hidden="true"
+            >
+              {{ specialist.initials }}
+            </div>
+            <h3 class="mt-6 text-[1.75rem] leading-[1.08]">
+              {{ specialist.name }}
+            </h3>
+            <p class="mt-3 max-w-[16rem] text-sm font-medium text-text-muted">
+              {{ specialist.role }}
+            </p>
+            <p class="mt-6 inline-flex items-center gap-2 text-primary">
+              <Phone :size="18" aria-hidden="true" />
+              <span>{{ specialist.phone }}</span>
+            </p>
+            <BaseButton
+              :href="createPhoneLink(specialist.phone)"
+              variant="secondary"
+              external
+              class="mt-6"
+            >
+              Позвонить
+            </BaseButton>
+          </BaseCard>
+        </div>
+      </BaseContainer>
+    </section>
 
     <section
       id="services"
@@ -535,57 +586,6 @@ useSchemaOrg([
               Офис компании в Мариуполе
             </p>
           </div>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <section class="section bg-[#DDE7F0]">
-      <BaseContainer>
-        <SectionHeading
-          title="С вами будут работать"
-          description="Наши специалисты спокойно ответят на вопросы, объяснят порядок действий и помогут организовать всё необходимое."
-        />
-        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <BaseCard
-            v-for="specialist in specialists"
-            :key="specialist.id"
-            class="flex h-full flex-col items-center text-center shadow-[0_10px_30px_rgba(12,30,50,0.08)]"
-          >
-            <NuxtImg
-              v-if="specialist.image"
-              :src="specialist.image"
-              :alt="specialist.name"
-              width="160"
-              height="160"
-              class="size-40 rounded-full object-cover"
-              loading="lazy"
-            />
-            <div
-              v-else
-              class="flex size-40 items-center justify-center rounded-full bg-surface-alt font-heading text-5xl text-primary"
-              aria-hidden="true"
-            >
-              {{ specialist.initials }}
-            </div>
-            <h3 class="mt-6 text-[1.75rem] leading-[1.08]">
-              {{ specialist.name }}
-            </h3>
-            <p class="mt-3 max-w-[16rem] text-sm font-medium text-text-muted">
-              {{ specialist.role }}
-            </p>
-            <p class="mt-6 inline-flex items-center gap-2 text-primary">
-              <Phone :size="18" aria-hidden="true" />
-              <span>{{ specialist.phone }}</span>
-            </p>
-            <BaseButton
-              :href="createPhoneLink(specialist.phone)"
-              variant="secondary"
-              external
-              class="mt-6"
-            >
-              Позвонить
-            </BaseButton>
-          </BaseCard>
         </div>
       </BaseContainer>
     </section>

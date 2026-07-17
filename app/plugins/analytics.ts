@@ -1,9 +1,9 @@
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  const yandexMetrikaId = config.public.yandexMetrikaId?.trim()
-  const yandexVerification = config.public.yandexVerification?.trim()
-  const googleSiteVerification = config.public.googleSiteVerification?.trim()
-  const gaMeasurementId = config.public.gaMeasurementId?.trim()
+  const yandexMetrikaId = String(config.public.yandexMetrikaId || '').trim()
+  const yandexVerification = String(config.public.yandexVerification || '').trim()
+  const googleSiteVerification = String(config.public.googleSiteVerification || '').trim()
+  const gaMeasurementId = String(config.public.gaMeasurementId || '').trim()
 
   const trackEvent = (eventName: string) => {
     const analyticsWindow = window as Window & {
@@ -68,9 +68,13 @@ export default defineNuxtPlugin(() => {
                 m[i].l=1*new Date();
                 for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
                 k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-                (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+                (window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=${yandexMetrikaId}", "ym");
                 ym(${JSON.stringify(yandexMetrikaId)}, "init", {
+                  ssr:true,
                   clickmap:true,
+                  ecommerce:"dataLayer",
+                  referrer: document.referrer,
+                  url: location.href,
                   trackLinks:true,
                   accurateTrackBounce:true,
                   webvisor:true
