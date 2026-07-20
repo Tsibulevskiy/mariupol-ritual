@@ -14,14 +14,14 @@ usePageSeo({
 const runtimeConfig = useRuntimeConfig()
 const canonical = new URL('/', runtimeConfig.public.siteUrl).toString()
 
-const services: Array<Service & { href: string }> = [
+const services: Service[] = [
   {
     id: 'funeral-organization',
     slug: 'organizaciya-pohoron-mariupol',
     name: 'Организация похорон',
-    description: 'Полностью сопровождаем все этапы проведения церемонии.',
+    description:
+      'Сопровождение всех этапов организации и проведения похорон от доставки тела в морг до погребения и поминального обеда.',
     icon: 'heartHandshake',
-    href: '/organizaciya-pohoron-mariupol',
   },
   {
     id: 'funeral-transport',
@@ -30,7 +30,6 @@ const services: Array<Service & { href: string }> = [
     description:
       'Перевозка умершего и транспорт для участников церемонии.',
     icon: 'carFront',
-    href: '/ritualny-transport-mariupol',
   },
   {
     id: 'ritual-goods',
@@ -39,7 +38,6 @@ const services: Array<Service & { href: string }> = [
     description:
       'Гробы, венки, кресты, текстиль и необходимые принадлежности.',
     icon: 'box',
-    href: '/ritualnye-tovary-mariupol',
   },
   {
     id: 'documents-help',
@@ -48,16 +46,14 @@ const services: Array<Service & { href: string }> = [
     description:
       'Консультируем по перечню документов и порядку их оформления.',
     icon: 'fileText',
-    href: '/chto-delat-esli-umer-chelovek',
   },
   {
     id: 'turnkey-funeral',
     slug: 'pohorony-pod-klyuch-mariupol',
     name: 'Похороны под ключ',
     description:
-      'Берем на себя организацию церемонии от обращения до завершения.',
+      'Полный перечень ритуальных услуг и атрибутики, от доставки тела в морг до погребения и поминального обеда.',
     icon: 'shieldCheck',
-    href: '/pohorony-pod-klyuch-mariupol',
   },
   {
     id: 'consultation-247',
@@ -66,7 +62,6 @@ const services: Array<Service & { href: string }> = [
     description:
       'Отвечаем на вопросы и помогаем определить дальнейшие действия.',
     icon: 'phone',
-    href: '/kontakty',
   },
 ]
 
@@ -394,14 +389,13 @@ useSchemaOrg([
       <BaseContainer>
         <SectionHeading
           title="Основные услуги"
-          description="Мы собрали основные направления нашей работы, чтобы вы могли быстро найти нужную информацию и перейти к интересующей услуге."
+          description="Мы собрали основные направления нашей работы, чтобы вы могли быстро ознакомиться с доступными услугами."
         />
         <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <ServiceCard
             v-for="service in services"
             :key="service.id"
             :service="service"
-            :href="service.href"
           />
         </div>
       </BaseContainer>
@@ -409,10 +403,15 @@ useSchemaOrg([
 
     <section class="section bg-[#F7F9FB]">
       <BaseContainer>
-        <SectionHeading
-          title="Стоимость услуг"
-          description="Стоимость рассчитывается индивидуально с учетом выбранных услуг, ритуальных принадлежностей, транспорта и особенностей организации церемонии в Мариуполе."
-        />
+        <div class="max-w-3xl">
+          <h2>Стоимость услуг</h2>
+          <p class="mt-4 text-text-muted">
+            <span class="block">Гробы — от 6 000 до 55 000 ₽</span>
+            <span class="block">Кресты — от 1 300 до 10 000 ₽</span>
+            <span class="block">Венки — от 1 000 до 15 000 ₽</span>
+            <span class="block">Широкий выбор постели и одежды для усопших</span>
+          </p>
+        </div>
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <BaseCard
             v-for="price in prices"

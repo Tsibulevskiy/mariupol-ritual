@@ -36,9 +36,9 @@ const benefits = [
               <span>Специальное предложение</span>
             </p>
             <p class="mt-5 text-[22px] leading-[1.1] font-bold text-white uppercase">
-              Бесплатный
+              Бесплатная
               <br />
-              <span class="normal-case">вывоз тела в морг</span>
+              <span class="normal-case">транспортировка тела в морг</span>
             </p>
             <a
               :href="createPhoneLink(contacts.phone)"
@@ -99,9 +99,9 @@ const benefits = [
             <span>Специальное предложение</span>
           </p>
           <p class="mt-5 text-[22px] leading-[1.1] font-bold text-white uppercase">
-            Бесплатный
+            Бесплатная
             <br />
-            <span class="normal-case">вывоз тела в морг</span>
+            <span class="normal-case">транспортировка тела в морг</span>
           </p>
           <a
             :href="createPhoneLink(contacts.phone)"
