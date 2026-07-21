@@ -7,6 +7,7 @@ const hiddenDraftRoutes = [
   '/kontakty',
   '/o-kompanii',
   '/organizaciya-pohoron-mariupol',
+  '/pamyatniki-mariupol',
   '/perevozka-umershih-mariupol',
   '/pohorony-pod-klyuch-mariupol',
   '/ritualny-transport-mariupol',
