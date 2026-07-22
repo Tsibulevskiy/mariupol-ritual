@@ -542,7 +542,7 @@ useSchemaOrg([
               О компании
             </span>
             <h2 class="mt-6 max-w-xl text-balance text-h2 font-heading text-white">
-              Поддерживаем Вас на каждом этапе организации похорон
+              Более 10 лет на рынке ритуальных услуг
             </h2>
             <p class="mt-6 max-w-2xl text-lg leading-8 text-[#DCE7F0]">
               Мы понимаем, насколько сложно принимать решения в такой момент.
@@ -550,21 +550,20 @@ useSchemaOrg([
               организацией и остаемся на связи на протяжении всего процесса.
             </p>
             <ul class="mt-8 grid gap-3 text-[#DCE7F0] sm:grid-cols-2">
-              <li class="flex items-center gap-3">
-                <span class="text-[var(--color-rating)]">✓</span>
-                <span>Помощь с документами</span>
+              <li class="sm:col-span-2">
+                <span>Наши принципы:</span>
               </li>
               <li class="flex items-center gap-3">
                 <span class="text-[var(--color-rating)]">✓</span>
-                <span>Организация похорон</span>
+                <span>Честные цены</span>
               </li>
               <li class="flex items-center gap-3">
                 <span class="text-[var(--color-rating)]">✓</span>
-                <span>Ритуальный транспорт</span>
+                <span>Высокое качество услуги</span>
               </li>
               <li class="flex items-center gap-3">
                 <span class="text-[var(--color-rating)]">✓</span>
-                <span>Индивидуальный подход</span>
+                <span>Уважение к умершим</span>
               </li>
             </ul>
           </div>
