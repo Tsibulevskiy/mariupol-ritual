@@ -29,12 +29,31 @@ export interface RelatedLink {
   href: string
 }
 
+export interface HeroBenefit {
+  icon: string
+  label: string
+}
+
+export interface MonumentProduct {
+  slug: string
+  name: string
+  size: string
+  price: string
+  image: string
+  summary: string
+}
+
 export interface ServicePage {
   id: string
   path: string
   h1: string
   metaTitle: string
   metaDescription: string
+  phone?: string
+  primaryActionLabel?: string
+  secondaryActionLabel?: string
+  secondaryActionHref?: string
+  benefits?: HeroBenefit[]
   eyebrow?: string
   summary: string
   included: string[]
