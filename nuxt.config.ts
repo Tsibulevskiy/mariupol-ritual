@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
+import { monumentProducts } from './app/data/monuments'
 
 const hiddenDraftRoutes = [
   '/ceny-na-pohorony-mariupol',
@@ -13,6 +14,7 @@ const hiddenDraftRoutes = [
   '/ritualny-transport-mariupol',
   '/ritualnye-tovary-mariupol',
   '/ritualnye-uslugi-mariupol',
+  ...monumentProducts.map((product) => `/pamyatniki-mariupol/${product.slug}`),
 ] as const
 
 // https://nuxt.com/docs/api/configuration/nuxt-config

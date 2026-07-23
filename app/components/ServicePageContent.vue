@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
+import { monumentProducts } from '@/data/monuments'
 import type { ServicePage } from '@/types/content'
 
 const props = defineProps<{
@@ -50,6 +51,11 @@ useSchemaOrg([
     <PageHero
       :title="page.h1"
       :description="page.summary"
+      :phone="page.phone"
+      :primary-action-label="page.primaryActionLabel"
+      :secondary-action-label="page.secondaryActionLabel"
+      :secondary-action-href="page.secondaryActionHref"
+      :benefits="page.benefits"
       :eyebrow="page.eyebrow"
       show-phone
     />
@@ -76,11 +82,21 @@ useSchemaOrg([
             <p class="mt-3 text-text-muted">
               {{ page.priceNote }}
             </p>
-            <CallButton label="Позвонить" class="mt-6" full-width />
+            <CallButton
+              :phone="page.phone"
+              label="Позвонить"
+              class="mt-6"
+              full-width
+            />
           </BaseCard>
         </div>
       </BaseContainer>
     </section>
+
+    <MonumentsCatalog
+      v-if="page.id === 'pamyatniki'"
+      :items="monumentProducts"
+    />
 
     <section class="section bg-surface-alt">
       <BaseContainer>
@@ -98,7 +114,7 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section class="section">
+    <section v-if="page.id !== 'pamyatniki'" class="section">
       <BaseContainer>
         <SectionHeading
           title="Порядок оказания услуги"
@@ -174,7 +190,7 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section class="section">
+    <section v-if="page.id !== 'pamyatniki'" class="section">
       <BaseContainer>
         <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
           <BaseCard>
@@ -189,6 +205,9 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <ContactBlock />
+    <ContactBlock
+      :phone="page.phone"
+      :show-telegram="page.id !== 'pamyatniki'"
+    />
   </div>
 </template>

@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { contacts } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
+
+withDefaults(
+  defineProps<{
+    phone?: string
+    showTelegram?: boolean
+  }>(),
+  {
+    phone: contacts.phone,
+    showTelegram: true,
+  },
+)
 </script>
 
 <template>
@@ -16,11 +27,11 @@ import { createPhoneLink } from '@/utils/contact-links'
             <dt class="font-semibold">Телефон</dt>
             <dd>
               <a
-                :href="createPhoneLink(contacts.phone)"
+                :href="createPhoneLink(phone)"
                 class="inline-flex min-h-11 items-center text-primary"
                 aria-label="Позвонить по телефону"
               >
-                {{ contacts.phone }}
+                {{ phone }}
               </a>
             </dd>
           </div>
@@ -34,8 +45,8 @@ import { createPhoneLink } from '@/utils/contact-links'
           </div>
         </dl>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-          <CallButton />
-          <MessengerButton messenger="telegram" />
+          <CallButton :phone="phone" />
+          <MessengerButton v-if="showTelegram" messenger="telegram" />
         </div>
       </div>
     </BaseContainer>
