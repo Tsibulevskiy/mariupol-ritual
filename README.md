@@ -47,17 +47,25 @@ address_click
 2. Структура страниц
 
 Не стоит делать только один лендинг. Правильнее создать локальный многостраничный сайт, где каждая важная услуга получает отдельную SEO-страницу.
+
+Открыты для sitemap
 /
-├── /ritualnye-uslugi-mariupol
-├── /organizaciya-pohoron-mariupol
-├── /pohorony-pod-klyuch-mariupol
-├── /ceny-na-pohorony-mariupol
-├── /ritualny-transport-mariupol
-├── /perevozka-umershih-mariupol
-├── /ritualnye-tovary-mariupol
-├── /chto-delat-esli-umer-chelovek
-├── /o-kompanii
-├── /kontakty
-├── /politika-konfidencialnosti
-└── /soglasie-na-obrabotku-dannyh
+/cookie-policy
+/personal-data-consent
+/politika-konfidencialnosti
+/terms
+
+Закрыты для sitemap
+/ceny-na-pohorony-mariupol
+/chto-delat-esli-umer-chelovek
+/kontakty
+/o-kompanii
+/organizaciya-pohoron-mariupol
+/pamyatniki-mariupol
+/perevozka-umershih-mariupol
+/pohorony-pod-klyuch-mariupol
+/ritualny-transport-mariupol
+/ritualnye-tovary-mariupol
+/ritualnye-uslugi-mariupol
+
 Главная страница / не должна полностью дублировать /ritualnye-uslugi-mariupol.
