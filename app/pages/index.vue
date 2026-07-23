@@ -472,7 +472,7 @@ useSchemaOrg([
       <BaseContainer>
         <SectionHeading
           title="Как проходит организация"
-          description="Мы понимаем, что в такой момент сложно принимать решения. Поэтому сопровождаем вас на каждом этапе — от первого обращения до завершения организации похорон."
+          description="Мы дорожим своей репутацией!"
         />
         <div class="relative mt-10">
           <div
@@ -545,9 +545,7 @@ useSchemaOrg([
               Более 10 лет на рынке ритуальных услуг
             </h2>
             <p class="mt-6 max-w-2xl text-lg leading-8 text-[#DCE7F0]">
-              Мы понимаем, насколько сложно принимать решения в такой момент.
-              Поэтому спокойно объясняем порядок действий, помогаем с
-              организацией и остаемся на связи на протяжении всего процесса.
+              Мы дорожим своей репутацией!
             </p>
             <ul class="mt-8 grid gap-3 text-[#DCE7F0] sm:grid-cols-2">
               <li class="sm:col-span-2">
@@ -560,6 +558,10 @@ useSchemaOrg([
               <li class="flex items-center gap-3">
                 <span class="text-[var(--color-rating)]">✓</span>
                 <span>Высокое качество услуги</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="text-[var(--color-rating)]">✓</span>
+                <span>Индивидуальный подход к каждому клиенту</span>
               </li>
               <li class="flex items-center gap-3">
                 <span class="text-[var(--color-rating)]">✓</span>
