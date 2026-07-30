@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { MapPin, Phone } from 'lucide-vue-next'
-import { contacts } from '@/config/contacts'
+import { contacts, monumentsPhone } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { createPhoneLink } from '@/utils/contact-links'
 
 const currentYear = new Date().getFullYear()
 const addresses = contacts.address.split(';').map((item) => item.trim())
+const route = useRoute()
+const footerPhone = computed(() =>
+  route.path.startsWith('/pamyatniki-mariupol')
+    ? monumentsPhone
+    : contacts.phone,
+)
 </script>
 
 <template>
@@ -32,11 +38,11 @@ const addresses = contacts.address.split(';').map((item) => item.trim())
               <Phone :size="18" class="mt-1 shrink-0 text-primary" aria-hidden="true" />
               <div>
                 <a
-                  :href="createPhoneLink(contacts.phone)"
+                  :href="createPhoneLink(footerPhone)"
                   class="inline-flex min-h-7 items-center text-[var(--color-primary-muted)] hover:text-white"
                   aria-label="Позвонить по телефону"
                 >
-                  {{ contacts.phone }}
+                  {{ footerPhone }}
                 </a>
                 <p class="text-sm text-[var(--color-primary-muted)]">{{ contacts.workingHours }}</p>
               </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Ruler } from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { monumentProducts } from '@/data/monuments'
@@ -56,6 +57,7 @@ useSchemaOrg([
       :secondary-action-label="page.secondaryActionLabel"
       :secondary-action-href="page.secondaryActionHref"
       :benefits="page.benefits"
+      :promo="page.promo"
       :eyebrow="page.eyebrow"
       show-phone
     />
@@ -70,24 +72,66 @@ useSchemaOrg([
               title="Кратко об услуге"
               :description="page.summary"
             />
+            <div
+              v-if="page.id === 'pamyatniki'"
+              class="mt-6 rounded-2xl border border-primary/15 bg-primary/5 p-5"
+            >
+              <p class="text-base font-semibold text-foreground">
+                При заказе памятника укладка ФЭМ-плитки и бордюр:
+              </p>
+              <p class="mt-4 text-lg font-semibold text-primary">
+                220 × 220 см — 35 000 ₽
+              </p>
+              <p class="mt-2 text-lg font-semibold text-primary">
+                220 × 150 см — 32 000 ₽
+              </p>
+              <p class="mt-4 inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                Уборка территории бесплатно
+              </p>
+            </div>
           </BaseCard>
 
-          <BaseCard>
-            <p class="text-sm font-semibold tracking-wider text-primary uppercase">
-              Стоимость
-            </p>
-            <p class="mt-4 text-3xl font-semibold text-primary">
-              {{ page.price }}
-            </p>
-            <p class="mt-3 text-text-muted">
-              {{ page.priceNote }}
-            </p>
-            <CallButton
-              :phone="page.phone"
-              label="Позвонить"
-              class="mt-6"
-              full-width
-            />
+          <BaseCard class="overflow-hidden !p-0">
+            <template v-if="page.id === 'pamyatniki'">
+              <NuxtImg
+                src="/car.png"
+                alt="Автомобиль ритуальной службы"
+                class="h-[211px] w-full object-contain bg-surface-alt"
+                width="1024"
+                height="1024"
+                loading="lazy"
+              />
+              <div class="p-6">
+                <p class="flex items-start gap-2 text-3xl font-semibold text-primary">
+                  <Ruler :size="24" aria-hidden="true" class="mt-1 shrink-0" />
+                  <span>Бесплатный выезд замера участка.</span>
+                </p>
+                <p class="mt-3 text-text-muted">
+                  Специалист приедет на место, снимет размеры и подскажет подходящий вариант установки.
+                </p>
+              </div>
+            </template>
+            <template v-else>
+              <div class="p-6">
+                <p class="text-sm font-semibold tracking-wider text-primary uppercase">
+                  Стоимость
+                </p>
+                <p class="mt-4 text-3xl font-semibold text-primary">
+                  {{ page.price }}
+                </p>
+                <p class="mt-3 text-text-muted">
+                  {{ page.priceNote }}
+                </p>
+              </div>
+            </template>
+            <div class="p-6 pt-0">
+              <CallButton
+                :phone="page.phone"
+                label="Позвонить"
+                class="mt-6"
+                full-width
+              />
+            </div>
           </BaseCard>
         </div>
       </BaseContainer>
@@ -97,22 +141,6 @@ useSchemaOrg([
       v-if="page.id === 'pamyatniki'"
       :items="monumentProducts"
     />
-
-    <section class="section bg-surface-alt">
-      <BaseContainer>
-        <SectionHeading
-          title="Что входит в услугу"
-          description="Состав раздела пока заполнен временным контентом."
-        />
-        <ul class="mt-10 grid gap-6 md:grid-cols-3">
-          <li v-for="item in page.included" :key="item">
-            <BaseCard class="h-full">
-              <p>{{ item }}</p>
-            </BaseCard>
-          </li>
-        </ul>
-      </BaseContainer>
-    </section>
 
     <section v-if="page.id !== 'pamyatniki'" class="section">
       <BaseContainer>
@@ -128,55 +156,6 @@ useSchemaOrg([
             </BaseCard>
           </li>
         </ol>
-      </BaseContainer>
-    </section>
-
-    <section class="section bg-surface-alt">
-      <BaseContainer>
-        <div class="grid gap-6 lg:grid-cols-2">
-          <BaseCard class="h-full">
-            <SectionHeading
-              title="Что оплачивается отдельно"
-              description="Этот блок тоже использует временные формулировки."
-            />
-            <ul class="mt-6 space-y-3 text-text-muted">
-              <li v-for="item in page.separatePayment" :key="item">
-                {{ item }}
-              </li>
-            </ul>
-          </BaseCard>
-
-          <BaseCard class="h-full">
-            <SectionHeading
-              title="Районы обслуживания"
-              description="Подробный перечень районов будет уточнен."
-            />
-            <ul class="mt-6 space-y-3 text-text-muted">
-              <li v-for="item in page.serviceAreas" :key="item">
-                {{ item }}
-              </li>
-            </ul>
-          </BaseCard>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <section class="section">
-      <BaseContainer>
-        <SectionHeading
-          title="Связанные услуги"
-          description="Если нужен другой формат помощи, можно перейти в соседние разделы."
-        />
-        <div class="mt-10 flex flex-wrap gap-3">
-          <BaseButton
-            v-for="item in page.relatedLinks"
-            :key="item.href"
-            :href="item.href"
-            variant="secondary"
-          >
-            {{ item.label }}
-          </BaseButton>
-        </div>
       </BaseContainer>
     </section>
 
