@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { MapPin, Phone } from 'lucide-vue-next'
-import { contacts, monumentsPhone } from '@/config/contacts'
+import { contacts, getPhoneByPath } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { createPhoneLink } from '@/utils/contact-links'
 
 const currentYear = new Date().getFullYear()
 const addresses = contacts.address.split(';').map((item) => item.trim())
 const route = useRoute()
-const footerPhone = computed(() =>
-  route.path.startsWith('/pamyatniki-mariupol')
-    ? monumentsPhone
-    : contacts.phone,
-)
+const footerPhone = computed(() => getPhoneByPath(route.path))
 </script>
 
 <template>
