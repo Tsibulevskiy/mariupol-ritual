@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { contacts } from '@/config/contacts'
+import { contacts, getPhoneByPath } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     label?: string
     phone?: string
@@ -11,20 +11,23 @@ withDefaults(
   }>(),
   {
     label: 'Позвонить',
-    phone: contacts.phone,
+    phone: undefined,
     variant: 'primary',
     fullWidth: false,
   },
 )
+
+const route = useRoute()
+const resolvedPhone = computed(() => props.phone ?? getPhoneByPath(route.path))
 </script>
 
 <template>
   <BaseButton
-    :href="createPhoneLink(phone)"
-    :variant="variant"
-    :full-width="fullWidth"
+    :href="createPhoneLink(resolvedPhone)"
+    :variant="props.variant"
+    :full-width="props.fullWidth"
     external
   >
-    {{ label }}
+    {{ props.label }}
   </BaseButton>
 </template>

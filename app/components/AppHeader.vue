@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Menu, X } from 'lucide-vue-next'
-import { contacts } from '@/config/contacts'
+import { contacts, getPhoneByPath } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
 
 const isMenuOpen = ref(false)
 const menuButton = ref<HTMLButtonElement>()
 const route = useRoute()
+const headerPhone = computed(() => getPhoneByPath(route.path))
 
 const navigation = [
   { label: 'Услуги', href: '/#services' },
@@ -70,13 +71,13 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
         <div class="hidden items-center gap-4 lg:flex">
           <a
-            :href="createPhoneLink(contacts.phone)"
+            :href="createPhoneLink(headerPhone)"
             class="inline-flex min-h-11 items-center text-sm font-medium text-text no-underline hover:text-primary"
             aria-label="Позвонить по телефону"
           >
-            {{ contacts.phone }}
+            {{ headerPhone }}
           </a>
-          <CallButton label="Позвонить" />
+          <CallButton :phone="headerPhone" label="Позвонить" />
         </div>
 
         <button
@@ -110,10 +111,10 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
           {{ item.label }}
         </NuxtLink>
         <a
-          :href="createPhoneLink(contacts.phone)"
+          :href="createPhoneLink(headerPhone)"
           class="mt-2 block rounded-lg px-3 py-3 font-medium text-text no-underline hover:bg-surface-alt"
         >
-          {{ contacts.phone }}
+          {{ headerPhone }}
         </a>
       </nav>
     </div>

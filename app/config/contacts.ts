@@ -1,6 +1,12 @@
 import type { Contacts } from '@/types/contact'
 
 export const monumentsPhone = '+ 7 949 090 40 40'
+export const monumentsPathPrefix = '/pamyatniki-mariupol'
+
+export const getPhoneByPath = (path: string) =>
+  path.startsWith(monumentsPathPrefix)
+    ? monumentsPhone
+    : contacts.phone
 
 export const contacts: Contacts = {
   phone: '+7 949 430 30 30',
