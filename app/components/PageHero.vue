@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { Gift } from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
-import type { HeroBenefit } from '@/types/content'
+import type { HeroBenefit, HeroPromo } from '@/types/content'
 import { createPhoneLink } from '@/utils/contact-links'
 
 withDefaults(
@@ -12,6 +13,7 @@ withDefaults(
     secondaryActionLabel?: string
     secondaryActionHref?: string
     benefits?: HeroBenefit[]
+    promo?: HeroPromo
     eyebrow?: string
     showActions?: boolean
     showPhone?: boolean
@@ -24,6 +26,7 @@ withDefaults(
     secondaryActionLabel: 'Узнать стоимость',
     secondaryActionHref: '#contact-form',
     benefits: () => [],
+    promo: undefined,
     eyebrow: undefined,
     showActions: true,
     showPhone: false,
@@ -43,11 +46,30 @@ withDefaults(
     <BaseContainer>
       <div
         :class="[
-          'grid items-center gap-10',
+          'grid gap-10',
+          promo ? 'lg:items-start' : 'items-center',
+          promo
+            ? 'lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)]'
+            : '',
           imageSrc ? 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]' : '',
         ]"
       >
         <div class="max-w-4xl">
+          <div
+            v-if="promo"
+            class="hero-offer mb-8 w-full max-w-[560px] rounded-[18px] border px-5 py-5 lg:hidden"
+          >
+            <p class="flex items-center gap-2 text-sm font-semibold text-white">
+              <Gift :size="16" aria-hidden="true" class="text-[var(--color-rating)]" />
+              <span>Специальное предложение</span>
+            </p>
+            <p class="mt-5 text-[22px] leading-[1.15] font-bold text-white">
+              {{ promo.title }}
+            </p>
+            <p class="mt-4 text-base font-medium text-white/82">
+              {{ promo.note }}
+            </p>
+          </div>
           <p
             v-if="eyebrow"
             class="mb-4 text-sm font-semibold tracking-wider text-primary uppercase"
@@ -85,6 +107,26 @@ withDefaults(
           </ul>
         </div>
 
+        <div
+          v-if="promo"
+          class="hidden lg:flex lg:justify-end"
+        >
+          <div
+            class="hero-offer w-full max-w-[380px] rounded-[18px] border px-6 py-5"
+          >
+            <p class="flex items-center gap-2 text-sm font-semibold text-white">
+              <Gift :size="16" aria-hidden="true" class="text-[var(--color-rating)]" />
+              <span>Специальное предложение</span>
+            </p>
+            <p class="mt-5 text-[22px] leading-[1.15] font-bold text-white">
+              {{ promo.title }}
+            </p>
+            <p class="mt-4 text-base font-medium text-white/82">
+              {{ promo.note }}
+            </p>
+          </div>
+        </div>
+
         <div v-if="imageSrc" class="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           <img
             :src="imageSrc"
@@ -99,3 +141,12 @@ withDefaults(
     </BaseContainer>
   </section>
 </template>
+
+<style scoped>
+.hero-offer {
+  border-color: rgb(255 255 255 / 10%);
+  background: rgb(16 34 51 / 88%);
+  color: white;
+  box-shadow: 0 16px 36px rgb(16 34 51 / 22%);
+}
+</style>

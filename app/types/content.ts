@@ -34,13 +34,29 @@ export interface HeroBenefit {
   label: string
 }
 
+export interface MonumentSizeOption {
+  label: string
+  price: string
+  pedestal: string
+  gravePlate: string
+}
+
+export type MonumentCategory = 'vertical' | 'horizontal' | 'complex'
+
 export interface MonumentProduct {
   slug: string
   name: string
-  size: string
-  price: string
+  category: MonumentCategory
+  topSeller?: boolean
+  material: string
   image: string
   summary: string
+  sizes: MonumentSizeOption[]
+}
+
+export interface HeroPromo {
+  title: string
+  note: string
 }
 
 export interface ServicePage {
@@ -54,6 +70,7 @@ export interface ServicePage {
   secondaryActionLabel?: string
   secondaryActionHref?: string
   benefits?: HeroBenefit[]
+  promo?: HeroPromo
   eyebrow?: string
   summary: string
   included: string[]
