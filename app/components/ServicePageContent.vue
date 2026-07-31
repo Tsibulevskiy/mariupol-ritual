@@ -4,6 +4,7 @@ import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { monumentProducts } from '@/data/monuments'
 import type { ServicePage } from '@/types/content'
+import { createPhoneLink } from '@/utils/contact-links'
 
 const props = defineProps<{
   page: ServicePage
@@ -141,6 +142,59 @@ useSchemaOrg([
       v-if="page.id === 'pamyatniki'"
       :items="monumentProducts"
     />
+
+    <section v-if="page.id === 'pamyatniki'" class="section">
+      <BaseContainer>
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(336px,416px)] lg:items-start">
+          <div>
+            <SectionHeading
+              title="С вами будет работать"
+              description="Менеджер ответит на вопросы по памятнику, согласует детали и останется с вами на связи."
+            />
+          </div>
+
+          <BaseCard>
+            <div class="flex flex-col gap-4">
+              <NuxtImg
+                src="/karina-manager.png"
+                alt="Менеджер Карина"
+                width="360"
+                height="360"
+                class="h-auto w-full rounded-2xl object-cover"
+                loading="lazy"
+                sizes="(max-width: 1023px) 100vw, 416px"
+              />
+
+              <div class="flex flex-col gap-4">
+                <div>
+                  <p class="text-sm font-semibold tracking-wider text-primary uppercase">
+                    Менеджер
+                  </p>
+                  <h3 class="mt-3 text-3xl font-semibold text-foreground">
+                    Карина
+                  </h3>
+                  <a
+                    :href="createPhoneLink('+7 949 751 47 86')"
+                    class="mt-4 inline-flex min-h-12 items-center font-serif text-2xl font-semibold text-primary"
+                    aria-label="Позвонить менеджеру Карине"
+                  >
+                    +7 949 751 47 86
+                  </a>
+                </div>
+
+                <BaseButton
+                  :href="createPhoneLink('+7 949 751 47 86')"
+                  variant="secondary"
+                  external
+                >
+                  Позвонить
+                </BaseButton>
+              </div>
+            </div>
+          </BaseCard>
+        </div>
+      </BaseContainer>
+    </section>
 
     <section v-if="page.id !== 'pamyatniki'" class="section">
       <BaseContainer>
