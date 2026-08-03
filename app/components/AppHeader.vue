@@ -10,6 +10,7 @@ const headerPhone = computed(() => getPhoneByPath(route.path))
 
 const navigation = [
   { label: 'Услуги', href: '/#services' },
+  { label: 'Каталог памятников', href: '/pamyatniki-mariupol#catalog' },
   { label: 'Цены', href: '/#service-packages' },
   { label: 'Что делать', href: '/#faq' },
   { label: 'О компании', href: '/#about-company' },
