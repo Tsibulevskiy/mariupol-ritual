@@ -188,6 +188,39 @@ const organizationSteps = [
   },
 ]
 
+const monumentPackages = [
+  {
+    id: 'monument-package-1',
+    number: '1',
+    price: '54 000 ₽',
+    specs: [
+      'Стела 80×40×8 см',
+      'Тумба 50×15×15 см',
+      'Надгробная плита 80×40×3 см',
+    ],
+  },
+  {
+    id: 'monument-package-2',
+    number: '2',
+    price: '65 000 ₽',
+    specs: [
+      'Стела 100×50×8 см',
+      'Тумба 60×20×15 см',
+      'Надгробная плита 100×50×5 см',
+    ],
+  },
+  {
+    id: 'monument-package-3',
+    number: '3',
+    price: '95 000 ₽',
+    specs: [
+      'Стела 120×60×8 см',
+      'Тумба 70×20×15 см',
+      'Надгробная плита 120×60×5 см',
+    ],
+  },
+]
+
 const specialists = [
   {
     id: 'victoria-second',
@@ -330,6 +363,74 @@ useSchemaOrg([
 <template>
   <div>
     <HomeHeroSection />
+
+    <section class="section bg-[#F7F9FB]">
+      <BaseContainer>
+        <div class="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div class="lg:pl-6">
+            <span
+              class="inline-flex rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary"
+            >
+              Каталог памятников
+            </span>
+            <h2 class="mt-6 max-w-xl">
+              Памятники из гранита с установкой в Мариуполе
+            </h2>
+            <p class="mt-4 max-w-xl text-text-muted">
+              В каталоге собраны варианты памятников с разными формами,
+              размерами и оформлением. Поможем подобрать подходящее решение,
+              согласуем детали изготовления и установки.
+            </p>
+            <BaseButton
+              href="/pamyatniki-mariupol#catalog"
+              variant="primary"
+              class="mt-8"
+            >
+              Перейти в каталог памятников
+            </BaseButton>
+          </div>
+
+          <BaseCard class="overflow-hidden !p-0">
+            <div
+              v-for="item in monumentPackages"
+              :key="item.id"
+              class="grid gap-5 px-5 py-5 md:grid-cols-[minmax(0,1fr)_220px] md:items-center md:px-6"
+              :class="item.id !== monumentPackages[monumentPackages.length - 1]?.id
+                ? 'border-b border-border'
+                : ''"
+            >
+              <div class="flex gap-4">
+                <div
+                  class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-white"
+                >
+                  {{ item.number }}
+                </div>
+                <div>
+                  <p
+                    v-for="spec in item.specs"
+                    :key="spec"
+                    class="text-sm leading-6 text-text md:text-base"
+                  >
+                    {{ spec }}
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="inline-flex items-center justify-center rounded-[14px] bg-primary px-6 py-4 text-2xl leading-none font-semibold text-white md:min-h-[88px]"
+              >
+                {{ item.price }}
+              </div>
+            </div>
+          </BaseCard>
+        </div>
+        <p class="mt-6 text-sm text-text-muted">
+          <span class="font-semibold text-text">Акция!</span>
+          При заказе памятников, художественная резка в подарок! Акция
+          действует до 01.09.2026.
+        </p>
+      </BaseContainer>
+    </section>
 
     <section class="section bg-[#DDE7F0]">
       <BaseContainer>

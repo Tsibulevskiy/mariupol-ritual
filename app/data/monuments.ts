@@ -146,7 +146,7 @@ export const monumentProducts: MonumentProduct[] = [
   {
     slug: 'monument-11',
     topSeller: true,
-    name: 'Памятник с цветком магнолии (11)',
+    name: 'Памятник с цветком розы (11)',
     category: 'vertical',
     material: 'Гранит',
     sizes: [
@@ -188,7 +188,7 @@ export const monumentProducts: MonumentProduct[] = [
   },
   {
     slug: 'monument-14',
-    name: 'Фигурный памятник с розами у основания (14)',
+    name: 'Фигурный памятник с крестом и драпировкой (14)',
     category: 'vertical',
     material: 'Гранит',
     sizes: [
@@ -556,7 +556,7 @@ export const monumentProducts: MonumentProduct[] = [
   },
   {
     slug: 'monument-40',
-    name: 'Вертикальный памятник с крестом и лампадой (40)',
+    name: 'Вертикальный памятник с крестом и свечей (40)',
     category: 'vertical',
     material: 'Гранит',
     sizes: [
@@ -628,7 +628,7 @@ export const monumentProducts: MonumentProduct[] = [
   },
   {
     slug: 'monument-45',
-    name: 'Памятник с тройным крестом (45)',
+    name: 'Памятник с крестом (45)',
     category: 'vertical',
     material: 'Гранит',
     sizes: [
