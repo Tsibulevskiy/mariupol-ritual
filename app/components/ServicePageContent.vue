@@ -22,6 +22,39 @@ const canonical = new URL(
   runtimeConfig.public.siteUrl,
 ).toString()
 
+const monumentPackages = [
+  {
+    id: 'monument-package-1',
+    number: '1',
+    price: '54 000 ₽',
+    specs: [
+      'Стела 80×40×8 см',
+      'Тумба 50×15×15 см',
+      'Надгробная плита 80×40×3 см',
+    ],
+  },
+  {
+    id: 'monument-package-2',
+    number: '2',
+    price: '65 000 ₽',
+    specs: [
+      'Стела 100×50×8 см',
+      'Тумба 60×20×15 см',
+      'Надгробная плита 100×50×5 см',
+    ],
+  },
+  {
+    id: 'monument-package-3',
+    number: '3',
+    price: '95 000 ₽',
+    specs: [
+      'Стела 120×60×8 см',
+      'Тумба 70×20×15 см',
+      'Надгробная плита 120×60×5 см',
+    ],
+  },
+]
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: props.page.breadcrumbs.map((item, index) => ({
@@ -138,6 +171,63 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
+    <section v-if="page.id === 'pamyatniki'" class="section bg-[#F7F9FB]">
+      <BaseContainer>
+        <SectionHeading
+          title="Цены на памятники"
+          description="Ниже приведены ориентиры по стоимости популярных комплектов памятников. Точную цену согласуем после выбора размера, оформления и условий установки."
+        />
+
+        <div class="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)] xl:items-start">
+          <BaseCard class="overflow-hidden !p-0">
+            <div
+              v-for="item in monumentPackages"
+              :key="item.id"
+              class="grid gap-4 px-4 py-4 md:grid-cols-[minmax(0,1fr)_220px] md:items-center md:gap-5 md:px-6 md:py-5"
+              :class="item.id !== monumentPackages[monumentPackages.length - 1]?.id
+                ? 'border-b border-border'
+                : ''"
+            >
+              <div class="flex gap-4">
+                <div
+                  class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-white"
+                >
+                  {{ item.number }}
+                </div>
+                <div>
+                  <p
+                    v-for="spec in item.specs"
+                    :key="spec"
+                    class="text-sm leading-6 text-text md:text-base"
+                  >
+                    {{ spec }}
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="inline-flex items-center justify-center rounded-[14px] bg-primary px-5 py-3 text-xl leading-none font-semibold text-white md:min-h-[88px] md:px-6 md:py-4 md:text-2xl"
+              >
+                {{ item.price }}
+              </div>
+            </div>
+          </BaseCard>
+
+          <BaseCard class="overflow-hidden !p-0">
+            <NuxtImg
+              src="/monuments-price-guide.webp"
+              alt="Схема элементов памятника: стела, подставка, тумба, надгробная плита, цветник"
+              width="1266"
+              height="1242"
+              class="h-[320px] w-full bg-white object-contain p-4 sm:h-[420px] sm:p-6 xl:h-full xl:object-cover xl:p-0"
+              loading="lazy"
+              sizes="(max-width: 1279px) 100vw, 420px"
+            />
+          </BaseCard>
+        </div>
+      </BaseContainer>
+    </section>
+
     <MonumentsCatalog
       v-if="page.id === 'pamyatniki'"
       :items="monumentProducts"
@@ -212,6 +302,8 @@ useSchemaOrg([
         </ol>
       </BaseContainer>
     </section>
+
+    <MonumentsPhotoSlider v-if="page.id === 'pamyatniki'" />
 
     <section class="section bg-surface-alt">
       <BaseContainer>
