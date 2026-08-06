@@ -74,6 +74,7 @@ export default defineNuxtConfig({
   },
   sitemap: {
     exclude: [...hiddenDraftRoutes],
+    zeroRuntime: true,
   },
   vite: {
     server: {

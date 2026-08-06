@@ -13,7 +13,10 @@ import type { Service } from '@/types/content'
 const props = defineProps<{
   service: Service
   href?: string
+  mobileExpandable?: boolean
 }>()
+
+const isExpanded = ref(false)
 
 const icons = {
   box: Box,
@@ -50,7 +53,22 @@ const icon = computed(() =>
         />
       </div>
       <h3 class="mt-5">{{ service.name }}</h3>
-      <p class="mt-3 flex-1 text-text-muted">{{ service.description }}</p>
+      <p
+        class="mt-3 flex-1 text-text-muted"
+        :class="props.mobileExpandable && !isExpanded
+          ? 'overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] md:block md:overflow-visible md:[display:block] md:[-webkit-box-orient:initial] md:[-webkit-line-clamp:unset]'
+          : ''"
+      >
+        {{ service.description }}
+      </p>
+      <button
+        v-if="props.mobileExpandable"
+        type="button"
+        class="mt-4 self-start text-sm font-medium text-primary md:hidden"
+        @click.prevent="isExpanded = !isExpanded"
+      >
+        {{ isExpanded ? 'Свернуть' : 'Подробнее' }}
+      </button>
     </BaseCard>
   </NuxtLink>
   <BaseCard v-else class="flex h-full flex-col shadow-[0_10px_30px_rgba(12,30,50,0.08)]">
@@ -66,6 +84,21 @@ const icon = computed(() =>
       />
     </div>
     <h3 class="mt-5">{{ service.name }}</h3>
-    <p class="mt-3 flex-1 text-text-muted">{{ service.description }}</p>
+    <p
+      class="mt-3 flex-1 text-text-muted"
+      :class="props.mobileExpandable && !isExpanded
+        ? 'overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] md:block md:overflow-visible md:[display:block] md:[-webkit-box-orient:initial] md:[-webkit-line-clamp:unset]'
+        : ''"
+    >
+      {{ service.description }}
+    </p>
+    <button
+      v-if="props.mobileExpandable"
+      type="button"
+      class="mt-4 self-start text-sm font-medium text-primary md:hidden"
+      @click="isExpanded = !isExpanded"
+    >
+      {{ isExpanded ? 'Свернуть' : 'Подробнее' }}
+    </button>
   </BaseCard>
 </template>
