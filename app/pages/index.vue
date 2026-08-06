@@ -900,6 +900,8 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
+    <WhatToDoBlock />
+
     <TrustBlock />
 
     <section id="about-company" class="section bg-[#22384D]">
