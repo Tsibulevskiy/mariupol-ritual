@@ -21,6 +21,42 @@ usePageSeo({
 
 const runtimeConfig = useRuntimeConfig()
 const canonical = new URL('/', runtimeConfig.public.siteUrl).toString()
+const routeUrl = 'https://maps.google.com/?q='
+
+const aboutReasons = [
+  'Более 10 лет опыта',
+  'Два офиса в Мариуполе',
+  'Полный комплекс ритуальных услуг',
+  'Круглосуточная консультация',
+  'Собственный ритуальный транспорт',
+  'Индивидуальный подход к каждой семье',
+]
+
+const aboutStats = [
+  { icon: '🏛️', value: '10+', label: 'лет работы' },
+  { icon: '📍', value: '2', label: 'офиса в Мариуполе' },
+  { icon: '☎️', value: '24/7', label: 'приём обращений' },
+  { icon: '⚱️', value: 'Все', label: 'ритуальные услуги' },
+]
+
+const aboutOffices = [
+  {
+    id: 'office-1',
+    title: 'Офис №1',
+    address: 'пер. Аэродромный, 48',
+    mapSrc: 'https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=98987920401',
+    photoSrc: '/Aerodromniy.webp',
+    photoAlt: 'Офис Мариупольского ритуального дома на переулке Аэродромном, 48',
+  },
+  {
+    id: 'office-2',
+    title: 'Офис №2',
+    address: 'ул. Кальмиусская, 143',
+    mapSrc: 'https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=123368163615',
+    photoSrc: '/kalmiuskaya.webp',
+    photoAlt: 'Офис Мариупольского ритуального дома на улице Кальмиусской, 143',
+  },
+]
 
 const services: Service[] = [
   {
@@ -906,64 +942,127 @@ useSchemaOrg([
 
     <section id="about-company" class="section bg-[#22384D]">
       <BaseContainer>
-        <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
-          <div>
+        <div class="grid gap-8 xl:grid-cols-[1.2fr_0.8fr] xl:items-start">
+          <div class="max-w-4xl">
             <span
               class="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-medium text-white/70"
             >
               О компании
             </span>
             <h2 class="mt-6 max-w-xl text-balance text-h2 font-heading text-white">
-              Более 10 лет на рынке ритуальных услуг
+              Мариупольский ритуальный дом — более 10 лет рядом с семьями города
             </h2>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-[#DCE7F0]">
-              Мы дорожим своей репутацией!
+            <p class="mt-6 max-w-3xl text-lg leading-8 text-[#DCE7F0]">
+              Уже более 10 лет Мариупольский ритуальный дом помогает семьям в организации похорон и решении связанных с этим вопросов. Мы понимаем, насколько важно в такой момент получить спокойную консультацию, понятные ответы и профессиональную поддержку. Поэтому стараемся взять на себя организационные вопросы, чтобы родственники могли уделить больше внимания прощанию с близким человеком.
+            </p>
+            <p class="mt-5 max-w-3xl text-lg leading-8 text-[#DCE7F0]">
+              Сегодня для вашего удобства работают два офиса в Мариуполе, где можно получить консультацию, ознакомиться с ритуальными принадлежностями, выбрать необходимые товары и оформить услуги. Мы также оказываем помощь по вопросам организации похорон, транспортировки, изготовления памятников и других ритуальных услуг.
             </p>
             <ul class="mt-8 grid gap-3 text-[#DCE7F0] sm:grid-cols-2">
               <li class="sm:col-span-2">
-                <span>Наши принципы:</span>
+                <span class="font-semibold text-white">Почему семьи обращаются к нам</span>
               </li>
-              <li class="flex items-center gap-3">
+              <li
+                v-for="reason in aboutReasons"
+                :key="reason"
+                class="flex items-center gap-3"
+              >
                 <span class="text-[var(--color-rating)]">✓</span>
-                <span>Честные цены</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[var(--color-rating)]">✓</span>
-                <span>Высокое качество услуги</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[var(--color-rating)]">✓</span>
-                <span>Индивидуальный подход к каждому клиенту</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[var(--color-rating)]">✓</span>
-                <span>Уважение к умершим</span>
+                <span>{{ reason }}</span>
               </li>
             </ul>
+
           </div>
-          <div class="relative lg:pl-6">
-            <figure
-              class="relative overflow-hidden rounded-[1.5rem] border border-border bg-surface shadow-lg shadow-black/10"
-            >
-              <div class="relative">
-                <NuxtImg
-                  src="/whatsapp-image-2026-07-12-12-23-46.jpeg"
-                  alt="Фотография компании «Мариупольский ритуальный дом»"
-                  width="320"
-                  height="290"
-                  class="h-full min-h-72 w-full object-cover"
+
+          <div class="space-y-5 xl:pl-4">
+            <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-1">
+              <article
+                v-for="office in aboutOffices"
+                :key="office.id"
+                class="overflow-hidden rounded-[1.5rem] border border-white/12 bg-white/6 shadow-lg shadow-black/10"
+              >
+                <iframe
+                  :src="office.mapSrc"
+                  width="560"
+                  height="400"
+                  frameborder="0"
+                  class="h-[240px] w-full border-b border-white/10"
+                  :title="`Карта офиса: ${office.address}`"
                   loading="lazy"
                 />
-                <div
-                  class="absolute inset-0 bg-text/10"
-                  aria-hidden="true"
-                />
-              </div>
-            </figure>
-            <p class="mt-3 text-sm text-[#DCE7F0]">
-              Офис компании в Мариуполе
+                <div class="grid gap-0 sm:grid-cols-[1fr_220px]">
+                  <div class="px-6 py-5">
+                    <p class="text-sm font-semibold tracking-[0.12em] text-[#C8A24D] uppercase">
+                      {{ office.title }}
+                    </p>
+                    <p class="mt-4 text-sm text-[#DCE7F0]">Офис</p>
+                    <a
+                      :href="`${routeUrl}${encodeURIComponent(office.address + ', Мариуполь')}`"
+                      class="mt-2 inline-flex text-base font-semibold text-white no-underline hover:text-[#C8A24D]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ office.address }}
+                    </a>
+                  </div>
+                  <div class="min-h-40 border-t border-white/10 bg-[#294158] sm:border-t-0 sm:border-l">
+                    <NuxtImg
+                      v-if="office.photoSrc"
+                      :src="office.photoSrc"
+                      :alt="office.photoAlt"
+                      width="220"
+                      height="160"
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div
+                      v-else
+                      class="flex h-full items-center justify-center px-5 py-5 text-center"
+                    >
+                      <p class="text-sm leading-6 text-[#DCE7F0]">
+                      Фото офиса будет добавлено после получения реального изображения.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div
+            v-for="item in aboutStats"
+            :key="item.label"
+            class="rounded-[1.25rem] border border-white/12 bg-white/8 px-5 py-5"
+          >
+            <div class="flex items-center gap-3">
+              <span class="text-2xl leading-none" aria-hidden="true">
+                {{ item.icon }}
+              </span>
+              <p class="text-[1.9rem] leading-none font-semibold text-white">
+                {{ item.value }}
+              </p>
+            </div>
+            <p class="mt-3 text-sm leading-6 text-[#DCE7F0]">
+              {{ item.label }}
             </p>
           </div>
+        </div>
+
+        <div
+          class="mt-8 flex flex-col gap-5 rounded-[1.5rem] border border-white/12 bg-white/8 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8"
+        >
+          <div>
+            <h3 class="text-[1.6rem] leading-[1.15] text-white">
+              Нужна консультация?
+            </h3>
+            <p class="mt-3 max-w-2xl text-[#DCE7F0]">
+              Мы готовы ответить на ваши вопросы в любое время суток.
+            </p>
+          </div>
+          <CallButton label="Позвонить" />
         </div>
       </BaseContainer>
     </section>
