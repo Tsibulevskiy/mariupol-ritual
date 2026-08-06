@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ClipboardList, HeartHandshake, Phone } from 'lucide-vue-next'
+import {
+  CalendarDays,
+  ChevronDown,
+  FileText,
+  Handshake,
+  Landmark,
+  Phone,
+  Users,
+} from 'lucide-vue-next'
 import type { Faq, PricePackage, Service } from '@/types/content'
 import { contacts } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
@@ -206,29 +214,67 @@ const packages: PricePackage[] = [
 const organizationSteps = [
   {
     id: 'first-call',
-    number: '01',
-    title: 'Первый звонок',
+    number: '①',
+    timelineTitle: 'Первый звонок',
+    title: 'Первое обращение',
     description:
-      'Вы связываетесь с нами удобным способом. Мы спокойно выслушаем ситуацию, ответим на вопросы и объясним, какие действия необходимо выполнить в первую очередь.',
+      'Позвоните нам в любое время суток. Специалист внимательно выслушает вашу ситуацию, ответит на первые вопросы и объяснит, какие действия необходимо выполнить в первую очередь. Консультация предоставляется бесплатно и помогает спокойно разобраться в дальнейших шагах.',
     icon: Phone,
   },
   {
-    id: 'coordination',
-    number: '02',
-    title: 'Согласование',
+    id: 'consultation',
+    number: '②',
+    timelineTitle: 'Консультация и согласование',
+    title: 'Консультация и согласование',
     description:
-      'Обсуждаем необходимые услуги, подбираем подходящий вариант организации, согласовываем стоимость и порядок дальнейших действий.',
-    icon: ClipboardList,
+      'Вместе с вами мы определяем необходимый перечень услуг, обсуждаем пожелания семьи, подбираем ритуальные принадлежности и заранее согласовываем стоимость. Вы получаете понятный план организации без скрытых платежей и неожиданных расходов.',
+    icon: Handshake,
   },
   {
-    id: 'organization',
-    number: '03',
-    title: 'Организация похорон',
+    id: 'documents-and-transport',
+    number: '③',
+    timelineTitle: 'Подготовка документов и транспорта',
+    title: 'Подготовка документов и транспорта',
     description:
-      'Берем на себя организационные вопросы, координируем выполнение согласованных услуг и остаемся с вами на связи до завершения церемонии.',
-    icon: HeartHandshake,
+      'При необходимости консультируем по порядку оформления документов, организуем транспортировку тела, подготавливаем ритуальный транспорт и координируем дальнейшие организационные вопросы. Все действия выполняются в согласованной последовательности.',
+    icon: FileText,
+  },
+  {
+    id: 'ceremony-preparation',
+    number: '④',
+    timelineTitle: 'Подготовка церемонии',
+    title: 'Подготовка церемонии',
+    description:
+      'Подбираем необходимые ритуальные принадлежности, согласовываем время проведения церемонии, организуем работу транспорта и помогаем подготовить всё необходимое для достойного прощания с близким человеком.',
+    icon: CalendarDays,
+  },
+  {
+    id: 'funeral-process',
+    number: '⑤',
+    timelineTitle: 'Проведение похорон',
+    title: 'Проведение похорон',
+    description:
+      'Координируем проведение церемонии, сопровождаем организационные процессы и остаёмся на связи с семьёй. Наша задача — взять на себя все согласованные вопросы, чтобы родственники могли сосредоточиться на прощании с близким человеком.',
+    icon: Users,
+  },
+  {
+    id: 'after-support',
+    number: '⑥',
+    timelineTitle: 'Поддержка после похорон',
+    title: 'Поддержка после похорон',
+    description:
+      'После проведения похорон мы продолжаем помогать семьям. При необходимости можно заказать изготовление и установку памятника, приобрести дополнительные ритуальные товары или получить консультацию по дальнейшим вопросам благоустройства места захоронения.',
+    icon: Landmark,
   },
 ]
+
+const activeOrganizationStep = ref(organizationSteps[0].id)
+
+const currentOrganizationStep = computed(
+  () =>
+    organizationSteps.find((step) => step.id === activeOrganizationStep.value)
+    ?? organizationSteps[0],
+)
 
 const monumentPackages = [
   {
@@ -618,47 +664,223 @@ useSchemaOrg([
 
     <section class="section">
       <BaseContainer>
-        <SectionHeading
-          title="Как проходит организация похорон в Мариуполе"
-          description="Мы дорожим своей репутацией!"
-        />
-        <div class="relative mt-10">
+        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div class="max-w-3xl">
+            <h2>Как проходит организация похорон в Мариуполе</h2>
+            <p class="mt-4 text-text-muted">
+              Мы сопровождаем семью на каждом этапе — от первого обращения до завершения церемонии. Специалист подробно объяснит порядок действий, поможет подобрать необходимые услуги и ответит на все возникающие вопросы.
+            </p>
+          </div>
           <div
-            class="absolute top-10 right-24 left-24 hidden h-px bg-border md:block"
-            aria-hidden="true"
-          />
-          <ol class="grid gap-6 md:grid-cols-3">
+            class="self-start rounded-[1.5rem] border border-[#31475D] bg-[#22384D] px-5 py-4 text-white shadow-lg shadow-black/10 md:max-w-[320px]"
+          >
+            <p class="text-sm font-semibold tracking-[0.08em] text-[#C8A24D] uppercase">
+              Наш подход
+            </p>
+            <p class="mt-3 text-lg leading-tight font-semibold text-balance">
+              Мы дорожим своей репутацией!
+            </p>
+          </div>
+        </div>
+        <div class="mt-10">
+          <ol class="relative hidden items-start md:grid md:grid-cols-6 md:gap-4">
+            <div
+              class="absolute top-3.5 right-[6%] left-[6%] h-px bg-primary/25"
+              aria-hidden="true"
+            />
             <li
-              v-for="(step, index) in organizationSteps"
-              :key="step.id"
-              class="relative"
+              v-for="step in organizationSteps"
+              :key="`${step.id}-desktop`"
+              class="relative z-10 flex flex-col items-center text-center"
             >
-              <div
-                v-if="index < organizationSteps.length - 1"
-                class="absolute top-[4.5rem] bottom-[-1.5rem] left-5 w-px bg-border md:hidden"
-                aria-hidden="true"
-              />
-              <BaseCard
-                class="relative flex h-full min-h-[260px] flex-col !p-10 transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-md"
+              <button
+                type="button"
+                class="group flex w-full flex-col items-center px-2"
+                @mouseenter="activeOrganizationStep = step.id"
+                @focus="activeOrganizationStep = step.id"
+                @click="activeOrganizationStep = step.id"
               >
-                <component
-                  :is="step.icon"
-                  :size="34"
-                  class="text-primary"
-                  aria-hidden="true"
-                />
-                <span class="mt-6 text-sm font-semibold tracking-[0.18em] text-primary">
-                  {{ step.number }}
+                <span
+                  :class="[
+                    'flex size-7 items-center justify-center rounded-full border text-xs font-semibold leading-none transition-colors',
+                    activeOrganizationStep === step.id
+                      ? 'border-primary bg-primary text-white'
+                      : 'border-primary bg-background text-primary',
+                  ]"
+                >
+                  {{ step.number.replace('①', '1').replace('②', '2').replace('③', '3').replace('④', '4').replace('⑤', '5').replace('⑥', '6') }}
                 </span>
-                <h3 class="mt-3 text-[1.75rem] leading-[1.08]">
-                  {{ step.title }}
+                <span
+                  :class="[
+                    'mt-6 flex size-[4.5rem] items-center justify-center rounded-full border bg-background transition-colors',
+                    activeOrganizationStep === step.id
+                      ? 'border-primary text-primary'
+                      : 'border-primary/55 text-primary group-hover:border-primary/75',
+                  ]"
+                >
+                  <component :is="step.icon" :size="28" stroke-width="1.75" />
+                </span>
+                <h3
+                  :class="[
+                    'mt-4 max-w-[11rem] text-[15px] leading-tight font-semibold transition-colors',
+                    activeOrganizationStep === step.id ? 'text-text' : 'text-text',
+                  ]"
+                >
+                  {{ step.timelineTitle }}
                 </h3>
-                <p class="mt-5 text-text-muted">
-                  {{ step.description }}
-                </p>
-              </BaseCard>
+              </button>
             </li>
           </ol>
+          <ol class="space-y-3 md:hidden">
+            <li
+              v-for="step in organizationSteps"
+              :key="`${step.id}-mobile`"
+              class="overflow-hidden rounded-xl border transition-colors"
+              :class="activeOrganizationStep === step.id ? 'border-primary/35 bg-white shadow-sm' : 'border-border bg-surface'"
+            >
+              <button
+                type="button"
+                class="flex w-full items-center gap-4 px-4 py-4 text-left"
+                @click="activeOrganizationStep = step.id"
+              >
+                <span
+                  :class="[
+                    'flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold leading-none transition-colors',
+                    activeOrganizationStep === step.id
+                      ? 'bg-primary text-white'
+                      : 'border border-primary/25 bg-primary/5 text-primary',
+                  ]"
+                >
+                  {{ step.number.replace('①', '1').replace('②', '2').replace('③', '3').replace('④', '4').replace('⑤', '5').replace('⑥', '6') }}
+                </span>
+                <span class="min-w-0 flex-1 text-base leading-snug font-semibold text-text">
+                  {{ step.timelineTitle }}
+                </span>
+                <ChevronDown
+                  :size="18"
+                  class="shrink-0 text-primary transition-transform"
+                  :class="activeOrganizationStep === step.id ? 'rotate-180' : ''"
+                />
+              </button>
+              <div v-if="activeOrganizationStep === step.id" class="border-t border-primary/10 px-4 pt-4 pb-4">
+                <div class="flex items-start gap-4">
+                  <span
+                    class="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/5 text-primary"
+                    aria-hidden="true"
+                  >
+                    <component :is="step.icon" :size="22" stroke-width="1.75" />
+                  </span>
+                  <div class="min-w-0">
+                    <h3 class="text-[1.4rem] leading-[1.12]">
+                      {{ step.title }}
+                    </h3>
+                    <p class="mt-4 text-text-muted">
+                      {{ step.description }}
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-5 rounded-xl border border-border bg-surface-alt p-4">
+                  <div class="flex items-center gap-3">
+                    <span
+                      class="flex size-10 items-center justify-center rounded-full bg-white text-primary shadow-sm"
+                      aria-hidden="true"
+                    >
+                      <Phone :size="18" />
+                    </span>
+                    <div>
+                      <p class="text-sm text-text-muted">
+                        Мы на связи 24/7
+                      </p>
+                      <a
+                        :href="createPhoneLink(contacts.phone)"
+                        class="mt-1 block text-lg font-semibold text-text no-underline"
+                      >
+                        {{ contacts.phone }}
+                      </a>
+                    </div>
+                  </div>
+                  <BaseButton
+                    :href="createPhoneLink(contacts.phone)"
+                    variant="primary"
+                    external
+                    class="mt-4 w-full justify-center"
+                  >
+                    Позвонить сейчас
+                  </BaseButton>
+                </div>
+              </div>
+            </li>
+          </ol>
+          <BaseCard class="mt-10 hidden overflow-hidden !p-0 md:block">
+            <div class="grid lg:grid-cols-[1.05fr_0.95fr]">
+              <div class="flex flex-col p-6 sm:p-8 lg:p-10">
+                <div class="flex items-center gap-4">
+                  <span
+                    class="flex size-16 items-center justify-center rounded-full border border-primary/20 bg-primary/5 text-3xl leading-none"
+                    aria-hidden="true"
+                  >
+                    <component
+                      :is="currentOrganizationStep.icon"
+                      :size="30"
+                      class="text-primary"
+                      stroke-width="1.75"
+                    />
+                  </span>
+                  <div>
+                    <p class="text-sm font-semibold tracking-[0.18em] text-primary">
+                      {{ currentOrganizationStep.number }}
+                    </p>
+                    <h3 class="mt-2 text-[1.9rem] leading-[1.08]">
+                      {{ currentOrganizationStep.title }}
+                    </h3>
+                  </div>
+                </div>
+                <p class="mt-8 max-w-2xl text-text-muted">
+                  {{ currentOrganizationStep.description }}
+                </p>
+                <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+                  <div
+                    class="flex min-h-16 flex-1 items-center gap-4 rounded-xl border border-border bg-surface-alt px-5 py-4"
+                  >
+                    <span
+                      class="flex size-11 items-center justify-center rounded-full bg-white text-primary shadow-sm"
+                      aria-hidden="true"
+                    >
+                      <Phone :size="20" />
+                    </span>
+                    <div>
+                      <p class="text-sm text-text-muted">
+                        Мы на связи 24/7
+                      </p>
+                      <a
+                        :href="createPhoneLink(contacts.phone)"
+                        class="mt-1 block font-semibold text-text no-underline"
+                      >
+                        {{ contacts.phone }}
+                      </a>
+                    </div>
+                  </div>
+                  <BaseButton
+                    :href="createPhoneLink(contacts.phone)"
+                    variant="primary"
+                    external
+                    class="sm:self-stretch"
+                  >
+                    Позвонить сейчас
+                  </BaseButton>
+                </div>
+              </div>
+              <div class="relative min-h-[280px] border-t border-border lg:min-h-full lg:border-t-0 lg:border-l">
+                <img
+                  src="/organization-step-photo.webp"
+                  alt="Ритуальный телефон и фирменное оформление офиса"
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-black/5" />
+              </div>
+            </div>
+          </BaseCard>
         </div>
         <div
           class="mt-8 flex flex-col gap-5 rounded-xl border border-border bg-surface px-6 py-5 md:flex-row md:items-center md:justify-between md:px-8"

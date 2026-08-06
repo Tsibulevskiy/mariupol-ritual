@@ -1,30 +1,49 @@
 <script setup lang="ts">
-import { Clock3, FileText, HeartHandshake, Truck } from 'lucide-vue-next'
+import {
+  BadgeRussianRuble,
+  Clock3,
+  FileText,
+  HeartHandshake,
+  PackageCheck,
+  Truck,
+} from 'lucide-vue-next'
 
 const items = [
   {
-    title: 'Круглосуточная поддержка',
+    title: 'Круглосуточная помощь',
     description:
-      'Отвечаем на обращения в любое время суток и готовы помочь в экстренной ситуации.',
+      'Принимаем обращения 24 часа в сутки, без выходных и праздников. Специалист объяснит порядок действий и поможет с организацией похорон.',
     icon: Clock3,
   },
   {
-    title: 'Полное сопровождение',
+    title: 'Прозрачная стоимость',
     description:
-      'Организуем необходимые этапы похорон и сопровождаем семью на протяжении всего процесса.',
-    icon: HeartHandshake,
+      'До начала организации подробно обсуждаем услуги и заранее согласовываем стоимость, чтобы вы понимали состав выбранного комплекса.',
+    icon: BadgeRussianRuble,
+  },
+  {
+    title: 'Полный комплекс услуг',
+    description:
+      'Можно заказать организацию похорон, ритуальный транспорт, принадлежности, памятники и другие ритуальные услуги в одном месте.',
+    icon: PackageCheck,
+  },
+  {
+    title: 'Собственный транспорт',
+    description:
+      'Используем специализированный ритуальный транспорт и заранее согласовываем детали церемонии, чтобы семья могла сосредоточиться на прощании.',
+    icon: Truck,
   },
   {
     title: 'Помощь с документами',
     description:
-      'Подскажем, какие документы нужны, и поможем разобраться с порядком оформления.',
+      'Консультируем по оформлению необходимых документов и объясняем, какие шаги могут потребоваться именно в вашей ситуации.',
     icon: FileText,
   },
   {
-    title: 'Оперативный выезд',
+    title: 'Индивидуальный подход',
     description:
-      'При необходимости оперативно выезжаем по Мариуполю и ближайшим районам.',
-    icon: Truck,
+      'Внимательно выслушиваем пожелания семьи, предлагаем подходящий вариант организации похорон и учитываем бюджет и необходимые услуги.',
+    icon: HeartHandshake,
   },
 ]
 </script>
@@ -33,35 +52,41 @@ const items = [
   <section class="section bg-[var(--color-background-soft)]">
     <BaseContainer>
       <SectionHeading
-        title="Рядом с вами на каждом этапе"
-        description="Берем на себя организационные вопросы, чтобы вы могли сосредоточиться на близких."
+        title="Почему семьи в Мариуполе выбирают Мариупольский ритуальный дом"
+        description="Более 10 лет мы помогаем семьям в сложный момент жизни. Наша задача — взять на себя организационные вопросы, предоставить понятную консультацию и обеспечить достойное проведение церемонии с уважением к памяти близкого человека."
         align="center"
       />
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <BaseCard
           v-for="item in items"
           :key="item.title"
-          class="flex min-h-[228px] flex-col text-center !p-8 transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-md"
+          class="group relative flex min-h-[228px] flex-col overflow-hidden border border-border bg-surface !p-6 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg md:min-h-[236px]"
         >
-          <component
-            :is="item.icon"
-            :size="32"
-            class="mx-auto text-primary"
-            aria-hidden="true"
+          <div
+            class="absolute inset-x-0 top-0 h-1 bg-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           />
-          <h3 class="mt-5 text-[1.5rem] leading-[1.15]">{{ item.title }}</h3>
-          <p class="mt-4 text-sm leading-7 text-text-muted">
+          <div
+            class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary"
+          >
+            <component :is="item.icon" :size="28" aria-hidden="true" />
+          </div>
+          <h3 class="mt-6 text-[1.35rem] leading-[1.2]">{{ item.title }}</h3>
+          <p class="mt-4 text-sm leading-6 text-text-muted">
             {{ item.description }}
           </p>
-          <div class="mt-5 h-px w-full bg-border" />
         </BaseCard>
       </div>
+
       <div
-        class="mt-8 flex flex-col gap-3 rounded-xl border border-border bg-surface px-6 py-4 text-sm text-text-muted md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6"
+        class="mt-8 rounded-xl border border-border bg-surface px-6 py-8 text-center shadow-sm md:px-8"
       >
-        <span>✓ Консультация по телефону</span>
-        <span>✓ Индивидуальный подход</span>
-        <span>✓ Понятный порядок действий</span>
+        <h3 class="text-[1.6rem] leading-[1.2]">
+          Нужна помощь прямо сейчас?
+        </h3>
+        <p class="mx-auto mt-3 max-w-3xl text-sm leading-6 text-text-muted md:text-base">
+          Позвоните нам — мы спокойно объясним порядок действий, ответим на вопросы и поможем организовать похороны.
+        </p>
+        <CallButton label="Позвонить сейчас" class="mt-6" />
       </div>
     </BaseContainer>
   </section>
