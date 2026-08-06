@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ClipboardList, HeartHandshake, Phone } from 'lucide-vue-next'
-import type { Faq, Price, PricePackage, Service } from '@/types/content'
+import type { Faq, PricePackage, Service } from '@/types/content'
 import { contacts } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
 
@@ -20,7 +20,7 @@ const services: Service[] = [
     slug: 'organizaciya-pohoron-mariupol',
     name: 'Организация похорон',
     description:
-      'Сопровождение всех этапов организации и проведения похорон от доставки тела в морг до погребения и поминального обеда.',
+      'Помогаем организовать похороны в Мариуполе с учётом пожеланий семьи и выбранного бюджета. Согласовываем порядок действий, подбираем ритуальные принадлежности, транспорт и необходимые услуги, координируем проведение церемонии и остаёмся на связи до завершения захоронения.',
     icon: 'heartHandshake',
   },
   {
@@ -28,7 +28,7 @@ const services: Service[] = [
     slug: 'ritualny-transport-mariupol',
     name: 'Ритуальный транспорт',
     description:
-      'Перевозка умершего и транспорт для участников церемонии.',
+      'Предоставляем специализированный транспорт для перевозки умершего, катафалк и транспорт сопровождения для родственников. Маршрут, время подачи и состав транспорта согласовываются заранее. Стоимость зависит от расстояния, количества автомобилей и особенностей церемонии.',
     icon: 'carFront',
   },
   {
@@ -36,7 +36,7 @@ const services: Service[] = [
     slug: 'ritualnye-tovary-mariupol',
     name: 'Ритуальные товары',
     description:
-      'Гробы, венки, кресты, текстиль и необходимые принадлежности.',
+      'В наших магазинах можно подобрать необходимые ритуальные принадлежности: гробы, кресты, венки, текстиль, одежду для усопшего и другие товары. Специалист поможет выбрать подходящий вариант с учётом бюджета, пожеланий семьи и состава церемонии.',
     icon: 'box',
   },
   {
@@ -44,7 +44,7 @@ const services: Service[] = [
     slug: 'chto-delat-esli-umer-chelovek',
     name: 'Помощь с документами',
     description:
-      'Консультируем по перечню документов и порядку их оформления.',
+      'Объясняем, какие документы могут потребоваться для организации похорон и в каком порядке необходимо действовать. Помогаем разобраться в последовательности оформления и подсказываем, куда обращаться в конкретной ситуации. Перечень документов уточняется индивидуально.',
     icon: 'fileText',
   },
   {
@@ -52,7 +52,7 @@ const services: Service[] = [
     slug: 'pohorony-pod-klyuch-mariupol',
     name: 'Похороны под ключ',
     description:
-      'Полный перечень ритуальных услуг и атрибутики, от доставки тела в морг до погребения и поминального обеда.',
+      'Берём на себя комплексную организацию похорон: от первичной консультации и согласования стоимости до подбора принадлежностей, транспорта, похоронной бригады и проведения церемонии. Состав услуг можно изменить в зависимости от ситуации, бюджета и пожеланий семьи.',
     icon: 'shieldCheck',
   },
   {
@@ -60,41 +60,83 @@ const services: Service[] = [
     slug: 'kontakty',
     name: 'Консультация 24/7',
     description:
-      'Отвечаем на вопросы и помогаем определить дальнейшие действия.',
+      'Принимаем обращения круглосуточно. Специалист спокойно выслушает ситуацию, объяснит первоочередные действия и подскажет, какие услуги могут потребоваться. Позвонить можно в любое время суток по телефону +7 949 430 30 30.',
     icon: 'phone',
   },
 ]
 
-const prices: Price[] = [
+const priceSectionDetails = [
   {
-    id: 'price-organization',
-    serviceId: 'funeral-organization',
-    name: 'Организация похорон',
-    value:
-      'Стоимость рассчитывается после консультации с учетом выбранного комплекса услуг и пожеланий семьи.',
+    id: 'price-detail-1',
+    title: 'Стоимость организации похорон',
+    description:
+      'Стоимость организации похорон зависит от выбранного комплекса услуг, ритуальных принадлежностей, транспорта и пожеланий семьи. Мы понимаем, что каждая ситуация индивидуальна, поэтому заранее обсуждаем состав услуг и согласовываем стоимость до начала организации похорон.',
   },
   {
-    id: 'price-transport',
-    serviceId: 'funeral-transport',
-    name: 'Ритуальный транспорт',
-    value:
-      'Цена зависит от маршрута, расстояния и необходимого транспортного сопровождения.',
+    id: 'price-detail-2',
+    title: 'Доступные варианты',
+    description:
+      'В нашем ритуальном доме доступны как социальные варианты похорон, так и расширенные комплексы с дополнительными услугами. При необходимости вы можете заказать полный комплекс организации похорон или выбрать только отдельные услуги — например, транспортировку тела, ритуальный транспорт, ритуальные принадлежности, помощь с документами или изготовление памятника.',
   },
   {
-    id: 'price-goods',
-    serviceId: 'ritual-goods',
-    name: 'Ритуальные товары',
-    value:
-      'Стоимость определяется выбранными ритуальными принадлежностями и их комплектацией.',
+    id: 'price-detail-3',
+    title: 'Прозрачное ценообразование',
+    description:
+      'Мы придерживаемся принципа прозрачного ценообразования. Перед оформлением заказа специалист подробно объяснит, что входит в выбранный пакет, какие услуги являются обязательными, а какие можно добавить по желанию. Это позволяет подобрать подходящий вариант с учётом бюджета семьи и избежать непредвиденных расходов.',
   },
   {
-    id: 'price-turnkey',
-    serviceId: 'funeral-organization',
-    name: 'Комплексная организация',
-    value:
-      'Индивидуальный расчет полного сопровождения церемонии с учетом всех необходимых услуг.',
+    id: 'price-detail-4',
+    title: 'Ориентировочные цены',
+    description:
+      'Ниже представлены ориентировочные цены на основные ритуальные услуги и готовые комплексы организации похорон. Для получения точного расчёта свяжитесь с нами по телефону — мы бесплатно проконсультируем, ответим на вопросы и поможем подобрать наиболее подходящий вариант.',
   },
 ]
+
+const priceInfoBlocks = [
+  {
+    id: 'price-info-factors',
+    title: 'Что влияет на стоимость',
+    intro: 'Стоимость организации похорон может зависеть от нескольких факторов:',
+    items: [
+      'выбранного комплекса услуг;',
+      'ритуальных принадлежностей (гроб, крест, венки и другие товары);',
+      'необходимости ритуального транспорта;',
+      'количества сопровождающих автомобилей;',
+      'организации церемонии прощания;',
+      'дополнительных пожеланий семьи.',
+    ],
+    note:
+      'Мы заранее согласовываем перечень услуг и итоговую стоимость, чтобы родственники могли спокойно принять решение без спешки и неожиданностей.',
+  },
+  {
+    id: 'price-info-included',
+    title: 'Что входит в наши комплексы',
+    intro:
+      'В зависимости от выбранного пакета организация похорон может включать:',
+    items: [
+      'консультацию специалиста;',
+      'помощь в организации похорон;',
+      'подбор ритуальных принадлежностей;',
+      'ритуальный транспорт;',
+      'сопровождение церемонии;',
+      'организацию захоронения;',
+      'консультацию по необходимым документам.',
+    ],
+    note:
+      'Если вам необходимы только отдельные услуги, их также можно заказать без оформления полного комплекса.',
+  },
+]
+
+const expandedPriceCards = ref<string[]>([])
+
+const isPriceCardExpanded = (id: string) =>
+  expandedPriceCards.value.includes(id)
+
+const togglePriceCard = (id: string) => {
+  expandedPriceCards.value = isPriceCardExpanded(id)
+    ? expandedPriceCards.value.filter(cardId => cardId !== id)
+    : [...expandedPriceCards.value, id]
+}
 
 const packages: PricePackage[] = [
   {
@@ -421,14 +463,15 @@ useSchemaOrg([
     >
       <BaseContainer>
         <SectionHeading
-          title="Основные услуги"
-          description="Мы собрали основные направления нашей работы, чтобы вы могли быстро ознакомиться с доступными услугами."
+          title="Основные ритуальные услуги в Мариуполе"
+          description="Помогаем организовать похороны и решить связанные с ними вопросы в одном месте. Можно заказать полный комплекс сопровождения или выбрать только необходимые услуги: транспортировку умершего, ритуальный транспорт, принадлежности, консультацию по документам и организацию церемонии."
         />
         <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <ServiceCard
             v-for="service in services"
             :key="service.id"
             :service="service"
+            mobile-expandable
           />
         </div>
       </BaseContainer>
@@ -437,7 +480,7 @@ useSchemaOrg([
     <section class="section bg-[#F7F9FB]">
       <BaseContainer>
         <div class="max-w-3xl">
-          <h2>Стоимость услуг</h2>
+          <h2>Стоимость ритуальных услуг в Мариуполе</h2>
           <p class="mt-4 text-text-muted">
             <span class="block">Гробы — от 6 000 до 55 000 ₽</span>
             <span class="block">Кресты — от 1 300 до 10 000 ₽</span>
@@ -447,17 +490,81 @@ useSchemaOrg([
         </div>
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <BaseCard
-            v-for="price in prices"
-            :key="price.id"
-            class="h-full transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-md"
+            v-for="item in priceSectionDetails"
+            :key="item.id"
+            class="h-full shadow-[0_10px_30px_rgba(12,30,50,0.08)]"
           >
-            <h3 class="max-w-[16rem] text-[2rem] leading-[1.08]">
-              {{ price.name }}
+            <h3 class="max-w-[18rem] text-[2rem] leading-[1.08]">
+              {{ item.title }}
             </h3>
-            <p class="mt-5 text-text-muted">
-              {{ price.value }}
-            </p>
+            <div
+              class="mt-5"
+              :class="!isPriceCardExpanded(item.id)
+                ? 'max-h-[4.75rem] overflow-hidden md:max-h-none'
+                : ''"
+            >
+              <p class="text-text-muted">
+                {{ item.description }}
+              </p>
+            </div>
+            <button
+              type="button"
+              class="mt-4 self-start text-sm font-medium text-primary md:hidden"
+              @click="togglePriceCard(item.id)"
+            >
+              {{ isPriceCardExpanded(item.id) ? 'Свернуть' : 'Подробнее' }}
+            </button>
           </BaseCard>
+        </div>
+        <div class="mt-6 grid gap-6 md:grid-cols-2">
+          <BaseCard
+            v-for="block in priceInfoBlocks"
+            :key="block.id"
+            class="h-full shadow-[0_10px_30px_rgba(12,30,50,0.08)]"
+          >
+            <h3 class="max-w-[18rem] text-[2rem] leading-[1.08]">
+              {{ block.title }}
+            </h3>
+            <div
+              class="mt-5"
+              :class="!isPriceCardExpanded(block.id)
+                ? 'max-h-[4.75rem] overflow-hidden md:max-h-none'
+                : ''"
+            >
+              <p class="text-text-muted">
+                {{ block.intro }}
+              </p>
+              <ul class="mt-4 space-y-3 text-text-muted">
+                <li v-for="item in block.items" :key="item">
+                  — {{ item }}
+                </li>
+              </ul>
+              <p v-if="block.note" class="mt-5 text-text-muted">
+                {{ block.note }}
+              </p>
+            </div>
+            <button
+              type="button"
+              class="mt-4 self-start text-sm font-medium text-primary md:hidden"
+              @click="togglePriceCard(block.id)"
+            >
+              {{ isPriceCardExpanded(block.id) ? 'Свернуть' : 'Подробнее' }}
+            </button>
+          </BaseCard>
+        </div>
+        <div
+          class="mt-8 flex flex-col gap-5 rounded-xl border border-border bg-surface px-6 py-5 md:flex-row md:items-center md:justify-between md:px-8"
+        >
+          <p class="max-w-3xl text-text-muted">
+            Не знаете, какой пакет выбрать? Позвоните нам по телефону +7 949 430 30 30. Мы бесплатно проконсультируем, расскажем о доступных вариантах и поможем подобрать оптимальное решение с учётом вашей ситуации и бюджета.
+          </p>
+          <BaseButton
+            :href="createPhoneLink(contacts.phone)"
+            variant="primary"
+            external
+          >
+            Получить консультацию
+          </BaseButton>
         </div>
       </BaseContainer>
     </section>
@@ -493,6 +600,14 @@ useSchemaOrg([
                 </li>
               </ul>
             </div>
+            <BaseButton
+              :href="createPhoneLink(contacts.phone)"
+              variant="primary"
+              external
+              class="mt-6 self-start"
+            >
+              Получить консультацию
+            </BaseButton>
           </BaseCard>
         </div>
         <p class="mt-8 max-w-4xl text-text-muted">
@@ -504,7 +619,7 @@ useSchemaOrg([
     <section class="section">
       <BaseContainer>
         <SectionHeading
-          title="Как проходит организация"
+          title="Как проходит организация похорон в Мариуполе"
           description="Мы дорожим своей репутацией!"
         />
         <div class="relative mt-10">
