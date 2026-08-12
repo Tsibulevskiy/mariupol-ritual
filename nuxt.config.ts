@@ -1,20 +1,16 @@
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
-import { monumentProducts } from './app/data/monuments'
 
 const hiddenDraftRoutes = [
   '/ceny-na-pohorony-mariupol',
   '/chto-delat-esli-umer-chelovek',
   '/kontakty',
   '/o-kompanii',
-  '/organizaciya-pohoron-mariupol',
-  '/pamyatniki-mariupol',
   '/perevozka-umershih-mariupol',
   '/pohorony-pod-klyuch-mariupol',
   '/ritualny-transport-mariupol',
   '/ritualnye-tovary-mariupol',
   '/ritualnye-uslugi-mariupol',
-  ...monumentProducts.map((product) => `/pamyatniki-mariupol/${product.slug}`),
 ] as const
 
 // https://nuxt.com/docs/api/configuration/nuxt-config

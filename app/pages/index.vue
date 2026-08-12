@@ -553,6 +553,7 @@ useSchemaOrg([
             v-for="service in services"
             :key="service.id"
             :service="service"
+            :href="service.slug === 'organizaciya-pohoron-mariupol' ? `/${service.slug}` : undefined"
             mobile-expandable
           />
         </div>
