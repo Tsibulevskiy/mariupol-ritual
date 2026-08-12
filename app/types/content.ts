@@ -59,6 +59,28 @@ export interface HeroPromo {
   note: string
 }
 
+export interface ServiceItem {
+  title: string
+  description: string
+  icon: string
+}
+
+export interface ServiceTimelineStep {
+  title: string
+  description: string
+  icon: string
+}
+
+export interface ServiceLocation {
+  title: string
+  address: string
+  phone: string
+  workingHours: string
+  photoSrc: string
+  photoAlt: string
+  mapQuery: string
+}
+
 export interface ServicePage {
   id: string
   path: string
@@ -72,6 +94,19 @@ export interface ServicePage {
   benefits?: HeroBenefit[]
   promo?: HeroPromo
   eyebrow?: string
+  imageSrc?: string
+  imageAlt?: string
+  serviceItems?: ServiceItem[]
+  serviceItemsNote?: string
+  timelineTitle?: string
+  timelineDescription?: string
+  timelineSteps?: ServiceTimelineStep[]
+  timelineCtaText?: string
+  locationsTitle?: string
+  locationsDescription?: string
+  locations?: ServiceLocation[]
+  faqTitle?: string
+  faqDescription?: string
   summary: string
   included: string[]
   process: string[]

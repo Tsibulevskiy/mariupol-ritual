@@ -1,5 +1,19 @@
 <script setup lang="ts">
-import { Ruler } from 'lucide-vue-next'
+import {
+  Ambulance,
+  Car,
+  ClipboardList,
+  Clock3,
+  FileText,
+  Flower2,
+  HeartHandshake,
+  MapPin,
+  Navigation,
+  Package,
+  PackageCheck,
+  Phone,
+  Ruler,
+} from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { monumentProducts } from '@/data/monuments'
@@ -55,6 +69,34 @@ const monumentPackages = [
   },
 ]
 
+const serviceItemIcons = {
+  ambulance: Ambulance,
+  fileText: FileText,
+  package: Package,
+  car: Car,
+  heartHandshake: HeartHandshake,
+  flower2: Flower2,
+  phone: Phone,
+  clipboardList: ClipboardList,
+  packageCheck: PackageCheck,
+} as const
+
+const activeTimelineStep = ref('')
+
+watchEffect(() => {
+  if (!activeTimelineStep.value) {
+    activeTimelineStep.value = props.page.timelineSteps?.[0]?.title ?? ''
+  }
+})
+
+const currentTimelineStep = computed(
+  () =>
+    props.page.timelineSteps?.find(step => step.title === activeTimelineStep.value)
+    ?? props.page.timelineSteps?.[0],
+)
+
+const routeUrl = 'https://maps.google.com/?q='
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: props.page.breadcrumbs.map((item, index) => ({
@@ -93,6 +135,8 @@ useSchemaOrg([
       :benefits="page.benefits"
       :promo="page.promo"
       :eyebrow="page.eyebrow"
+      :image-src="page.imageSrc"
+      :image-alt="page.imageAlt"
       show-phone
     />
 
@@ -100,7 +144,246 @@ useSchemaOrg([
       <BaseContainer>
         <Breadcrumbs :items="page.breadcrumbs" />
 
-        <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <div
+          v-if="page.serviceItems?.length"
+          class="mt-8"
+        >
+          <SectionHeading
+            title="Что входит в организацию похорон"
+            description="Организация похорон включает множество вопросов, которые необходимо решить за короткое время. Мариупольский ритуальный дом поможет пройти все основные этапы — от первого обращения и перевозки тела до прощания и захоронения."
+          />
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <BaseCard
+              v-for="item in page.serviceItems"
+              :key="item.title"
+              class="h-full"
+            >
+              <div class="flex items-start gap-4">
+                <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <component
+                    :is="serviceItemIcons[item.icon as keyof typeof serviceItemIcons]"
+                    :size="22"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div>
+                  <p class="text-lg font-semibold text-foreground">
+                    {{ item.title }}
+                  </p>
+                  <p class="mt-3 text-text-muted">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            </BaseCard>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <p
+              v-if="page.serviceItemsNote"
+              class="text-base text-text-muted"
+            >
+              {{ page.serviceItemsNote }}
+            </p>
+            <BaseButton :href="createPhoneLink(page.phone ?? contacts.phone)" variant="secondary" external>
+              Получить консультацию
+            </BaseButton>
+          </div>
+        </div>
+
+        <div
+          v-if="page.timelineSteps?.length"
+          class="mt-12"
+        >
+          <SectionHeading
+            :title="page.timelineTitle ?? ''"
+            :description="page.timelineDescription ?? ''"
+          />
+
+          <ol class="relative mt-8 hidden items-start md:grid md:grid-cols-5 md:gap-4">
+            <div
+              class="absolute top-3.5 right-[8%] left-[8%] h-px bg-primary/25"
+              aria-hidden="true"
+            />
+            <li
+              v-for="(step, index) in page.timelineSteps"
+              :key="`${step.title}-desktop`"
+              class="relative z-10 flex flex-col items-center text-center"
+            >
+              <button
+                type="button"
+                class="group flex w-full flex-col items-center px-2"
+                @mouseenter="activeTimelineStep = step.title"
+                @focus="activeTimelineStep = step.title"
+                @click="activeTimelineStep = step.title"
+              >
+                <span
+                  :class="[
+                    'flex size-7 items-center justify-center rounded-full border text-xs font-semibold leading-none transition-colors',
+                    activeTimelineStep === step.title
+                      ? 'border-primary bg-primary text-white'
+                      : 'border-primary bg-background text-primary',
+                  ]"
+                >
+                  {{ index + 1 }}
+                </span>
+                <span
+                  :class="[
+                    'mt-6 flex size-[4.5rem] items-center justify-center rounded-full border bg-background transition-colors',
+                    activeTimelineStep === step.title
+                      ? 'border-primary text-primary'
+                      : 'border-primary/55 text-primary group-hover:border-primary/75',
+                  ]"
+                >
+                  <component
+                    :is="serviceItemIcons[step.icon as keyof typeof serviceItemIcons]"
+                    :size="28"
+                    stroke-width="1.75"
+                  />
+                </span>
+                <h3 class="mt-4 max-w-[11rem] text-[15px] leading-tight font-semibold text-text">
+                  {{ step.title }}
+                </h3>
+              </button>
+            </li>
+          </ol>
+
+          <ol class="mt-8 space-y-3 md:hidden">
+            <li
+              v-for="(step, index) in page.timelineSteps"
+              :key="`${step.title}-mobile`"
+              class="overflow-hidden rounded-xl border transition-colors"
+              :class="activeTimelineStep === step.title ? 'border-primary/35 bg-white shadow-sm' : 'border-border bg-surface'"
+            >
+              <button
+                type="button"
+                class="flex w-full items-center gap-4 px-4 py-4 text-left"
+                @click="activeTimelineStep = step.title"
+              >
+                <span
+                  :class="[
+                    'flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold leading-none transition-colors',
+                    activeTimelineStep === step.title
+                      ? 'bg-primary text-white'
+                      : 'border border-primary/25 bg-primary/5 text-primary',
+                  ]"
+                >
+                  {{ index + 1 }}
+                </span>
+                <span class="min-w-0 flex-1 text-base leading-snug font-semibold text-text">
+                  {{ step.title }}
+                </span>
+              </button>
+              <div
+                v-if="activeTimelineStep === step.title"
+                class="border-t border-primary/10 px-4 pt-4 pb-4"
+              >
+                <div class="flex items-start gap-4">
+                  <span
+                    class="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/5 text-primary"
+                    aria-hidden="true"
+                  >
+                    <component
+                      :is="serviceItemIcons[step.icon as keyof typeof serviceItemIcons]"
+                      :size="22"
+                      stroke-width="1.75"
+                    />
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold tracking-wider text-primary uppercase">
+                      Шаг {{ index + 1 }}
+                    </p>
+                    <p class="mt-2 text-[1.4rem] leading-[1.12] font-semibold text-foreground">
+                      {{ step.title }}
+                    </p>
+                    <p class="mt-4 text-text-muted">
+                      {{ step.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ol>
+
+          <BaseCard
+            v-if="currentTimelineStep"
+            class="mt-10 hidden overflow-hidden !p-0 md:block"
+          >
+            <div class="flex flex-col p-6 sm:p-8 lg:p-10">
+              <div class="flex items-center gap-4">
+                <span
+                  class="flex size-16 items-center justify-center rounded-full border border-primary/20 bg-primary/5 text-3xl leading-none"
+                  aria-hidden="true"
+                >
+                  <component
+                    :is="serviceItemIcons[currentTimelineStep.icon as keyof typeof serviceItemIcons]"
+                    :size="30"
+                    class="text-primary"
+                    stroke-width="1.75"
+                  />
+                </span>
+                <div>
+                  <p class="text-sm font-semibold tracking-[0.18em] text-primary">
+                    Шаг {{ (page.timelineSteps?.findIndex(step => step.title === currentTimelineStep.title) ?? 0) + 1 }}
+                  </p>
+                  <h3 class="mt-2 text-[1.9rem] leading-[1.08]">
+                    {{ currentTimelineStep.title }}
+                  </h3>
+                </div>
+              </div>
+              <p class="mt-8 max-w-3xl text-text-muted">
+                {{ currentTimelineStep.description }}
+              </p>
+            </div>
+          </BaseCard>
+
+          <div class="mt-6 hidden flex-col gap-4 sm:flex-row md:flex">
+            <div
+              class="flex min-h-16 flex-1 items-center gap-4 rounded-xl border border-border bg-surface-alt px-5 py-4"
+            >
+              <span
+                class="flex size-11 items-center justify-center rounded-full bg-white text-primary shadow-sm"
+                aria-hidden="true"
+              >
+                <Phone :size="20" />
+              </span>
+              <div>
+                <p class="text-sm text-text-muted">
+                  Нужна помощь сейчас?
+                </p>
+                <a
+                  :href="createPhoneLink(page.phone ?? contacts.phone)"
+                  class="mt-1 block font-semibold text-text no-underline"
+                >
+                  +7 949 430-30-30
+                </a>
+              </div>
+            </div>
+            <BaseButton
+              :href="createPhoneLink(page.phone ?? contacts.phone)"
+              variant="primary"
+              external
+              class="sm:self-stretch"
+            >
+              Позвонить сейчас
+            </BaseButton>
+          </div>
+
+          <BaseCard class="mt-6 border-primary/15 bg-primary/5 md:hidden">
+            <a
+              :href="createPhoneLink(page.phone ?? contacts.phone)"
+              class="text-lg font-semibold text-primary"
+            >
+              {{ page.timelineCtaText }}
+            </a>
+          </BaseCard>
+        </div>
+
+        <div
+          v-if="page.id !== 'organizaciya-pohoron'"
+          class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]"
+        >
           <BaseCard>
             <SectionHeading
               title="Кратко об услуге"
@@ -165,6 +448,90 @@ useSchemaOrg([
                 class="mt-6"
                 full-width
               />
+            </div>
+          </BaseCard>
+        </div>
+
+      </BaseContainer>
+    </section>
+
+    <section
+      v-if="page.locations?.length"
+      class="section bg-surface-alt"
+    >
+      <BaseContainer>
+        <SectionHeading
+          :title="page.locationsTitle ?? ''"
+          :description="page.locationsDescription ?? ''"
+        />
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-2">
+          <BaseCard
+            v-for="location in page.locations"
+            :key="location.title"
+            class="overflow-hidden !p-0"
+          >
+            <img
+              :src="location.photoSrc"
+              :alt="location.photoAlt"
+              width="1200"
+              height="900"
+              class="h-64 w-full object-cover"
+              loading="lazy"
+            />
+            <div class="p-6">
+              <p class="text-sm font-semibold tracking-wider text-primary uppercase">
+                {{ location.title }}
+              </p>
+              <ul class="mt-5 space-y-4">
+                <li class="flex items-start gap-3">
+                  <MapPin :size="20" class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
+                  <div>
+                    <p class="font-semibold text-foreground">
+                      {{ location.address }}
+                    </p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <Phone :size="20" class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
+                  <div>
+                    <a
+                      :href="createPhoneLink(location.phone)"
+                      class="font-semibold text-foreground no-underline"
+                    >
+                      {{ location.phone }}
+                    </a>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <Clock3 :size="20" class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
+                  <div>
+                    <p class="text-text-muted">
+                      {{ location.workingHours }}
+                    </p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                <BaseButton
+                  :href="createPhoneLink(location.phone)"
+                  variant="primary"
+                  external
+                >
+                  Позвонить
+                </BaseButton>
+                <BaseButton
+                  :href="`${routeUrl}${encodeURIComponent(location.mapQuery)}`"
+                  variant="secondary"
+                  external
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <Navigation :size="18" aria-hidden="true" />
+                    <span>Построить маршрут</span>
+                  </span>
+                </BaseButton>
+              </div>
             </div>
           </BaseCard>
         </div>
@@ -286,7 +653,7 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section v-if="page.id !== 'pamyatniki'" class="section">
+    <section v-if="page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron'" class="section">
       <BaseContainer>
         <SectionHeading
           title="Порядок оказания услуги"
@@ -308,14 +675,14 @@ useSchemaOrg([
     <section class="section bg-surface-alt">
       <BaseContainer>
         <SectionHeading
-          title="Частые вопросы"
-          description="Ответы будут уточняться по мере наполнения сайта."
+          :title="page.faqTitle ?? 'Частые вопросы'"
+          :description="page.faqDescription ?? 'Ответы будут уточняться по мере наполнения сайта.'"
         />
         <FaqAccordion :items="page.faq" class="mt-10" />
       </BaseContainer>
     </section>
 
-    <section v-if="page.id !== 'pamyatniki'" class="section">
+    <section v-if="page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron'" class="section">
       <BaseContainer>
         <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
           <BaseCard>
@@ -331,6 +698,7 @@ useSchemaOrg([
     </section>
 
     <ContactBlock
+      v-if="page.id !== 'organizaciya-pohoron'"
       :phone="page.phone"
       :show-telegram="page.id !== 'pamyatniki'"
     />

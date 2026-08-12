@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { Gift } from 'lucide-vue-next'
+import { Box, Clock3, Gift, HandHelping, Truck } from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
 import type { HeroBenefit, HeroPromo } from '@/types/content'
 import { createPhoneLink } from '@/utils/contact-links'
+
+const benefitIcons = {
+  clock: Clock3,
+  truck: Truck,
+  box: Box,
+  handHelping: HandHelping,
+} as const
 
 withDefaults(
   defineProps<{
@@ -80,31 +87,31 @@ withDefaults(
           <p class="mt-6 max-w-2xl text-lg text-text-muted sm:text-xl">
             {{ description }}
           </p>
-          <a
+          <div
             v-if="showPhone"
-            :href="createPhoneLink(phone)"
-            class="mt-6 inline-flex min-h-12 items-center font-serif text-2xl font-semibold text-primary sm:text-3xl"
-            aria-label="Позвонить по телефону"
+            class="mt-6 inline-flex w-full max-w-[360px] flex-col rounded-2xl border border-primary/20 bg-primary/5 px-5 py-4 shadow-md ring-1 ring-primary/10"
           >
-            {{ phone }}
-          </a>
+            <span class="text-sm font-semibold tracking-wider text-primary uppercase">
+              Телефон 24/7
+            </span>
+            <a
+              :href="createPhoneLink(phone)"
+              class="mt-2 inline-flex min-h-12 items-center font-serif text-3xl font-semibold text-primary sm:text-4xl"
+              aria-label="Позвонить по телефону"
+            >
+              {{ phone }}
+            </a>
+          </div>
           <div v-if="showActions" class="mt-8 flex flex-col gap-3 sm:flex-row">
             <CallButton :phone="phone" :label="primaryActionLabel" />
-            <BaseButton :href="secondaryActionHref" variant="secondary">
+            <BaseButton
+              v-if="secondaryActionLabel"
+              :href="secondaryActionHref"
+              variant="secondary"
+            >
               {{ secondaryActionLabel }}
             </BaseButton>
           </div>
-          <ul
-            v-if="benefits.length"
-            class="mt-8 grid gap-3 sm:grid-cols-2"
-          >
-            <li v-for="benefit in benefits" :key="benefit.label">
-              <div class="flex h-full items-center gap-3 rounded-xl border border-border bg-background px-4 py-3 shadow-sm">
-                <span class="text-2xl" aria-hidden="true">{{ benefit.icon }}</span>
-                <span class="font-medium text-foreground">{{ benefit.label }}</span>
-              </div>
-            </li>
-          </ul>
         </div>
 
         <div
@@ -127,7 +134,10 @@ withDefaults(
           </div>
         </div>
 
-        <div v-if="imageSrc" class="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div
+          v-if="imageSrc"
+          class="w-[70%] justify-self-end overflow-hidden rounded-2xl border border-border bg-surface shadow-sm"
+        >
           <img
             :src="imageSrc"
             :alt="imageAlt"
@@ -137,6 +147,25 @@ withDefaults(
             loading="eager"
           />
         </div>
+      </div>
+
+      <div
+        v-if="benefits.length"
+        class="mt-10 rounded-2xl border border-border bg-surface-alt p-4 shadow-sm sm:p-5"
+      >
+        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <li v-for="benefit in benefits" :key="benefit.label">
+            <div class="flex h-full items-center gap-3 rounded-xl border border-border bg-background px-4 py-3 shadow-sm">
+              <component
+                :is="benefitIcons[benefit.icon as keyof typeof benefitIcons]"
+                :size="20"
+                class="shrink-0 text-primary"
+                aria-hidden="true"
+              />
+              <span class="font-medium text-foreground">{{ benefit.label }}</span>
+            </div>
+          </li>
+        </ul>
       </div>
     </BaseContainer>
   </section>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  ArrowRight,
   Box,
   CarFront,
   FileText,
@@ -37,10 +38,10 @@ const icon = computed(() =>
   <NuxtLink
     v-if="href"
     :to="href"
-    class="block h-full no-underline"
+    class="group block h-full no-underline"
     :aria-label="service.name"
   >
-    <BaseCard class="flex h-full flex-col shadow-[0_10px_30px_rgba(12,30,50,0.08)]">
+    <BaseCard class="flex h-full flex-col shadow-[0_10px_30px_rgba(12,30,50,0.08)] transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:shadow-md">
       <div
         v-if="icon"
         class="flex size-11 items-center justify-center rounded-xl bg-[var(--color-primary-soft)]"
@@ -61,8 +62,12 @@ const icon = computed(() =>
       >
         {{ service.description }}
       </p>
+      <div class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
+        <span>Перейти к услуге</span>
+        <ArrowRight :size="16" aria-hidden="true" class="transition-transform duration-150 group-hover:translate-x-1" />
+      </div>
       <button
-        v-if="props.mobileExpandable"
+        v-if="props.mobileExpandable && !href"
         type="button"
         class="mt-4 self-start text-sm font-medium text-primary md:hidden"
         @click.prevent="isExpanded = !isExpanded"
