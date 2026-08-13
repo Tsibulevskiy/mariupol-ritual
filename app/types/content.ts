@@ -32,6 +32,7 @@ export interface RelatedLink {
 export interface HeroBenefit {
   icon: string
   label: string
+  description?: string
 }
 
 export interface MonumentSizeOption {
@@ -56,7 +57,7 @@ export interface MonumentProduct {
 
 export interface HeroPromo {
   title: string
-  note: string
+  note?: string
 }
 
 export interface ServiceItem {
@@ -65,7 +66,20 @@ export interface ServiceItem {
   icon: string
 }
 
+export interface ServiceBenefitItem {
+  title: string
+  description: string
+  icon: string
+}
+
 export interface ServiceTimelineStep {
+  title: string
+  description: string
+  icon: string
+}
+
+export interface ServiceOrderStep {
+  number: string
   title: string
   description: string
   icon: string
@@ -92,10 +106,24 @@ export interface ServicePage {
   secondaryActionLabel?: string
   secondaryActionHref?: string
   benefits?: HeroBenefit[]
+  highlightText?: string
+  descriptionSecondary?: string
   promo?: HeroPromo
+  promoPhone?: string
   eyebrow?: string
   imageSrc?: string
   imageAlt?: string
+  serviceItemsTitle?: string
+  serviceItemsDescription?: string
+  highlightSectionTitle?: string
+  highlightSectionText?: string[]
+  geographyTitle?: string
+  geographyDescription?: string
+  geographyDirections?: string[]
+  reasonsTitle?: string
+  reasonsItems?: ServiceBenefitItem[]
+  orderStepsTitle?: string
+  orderSteps?: ServiceOrderStep[]
   serviceItems?: ServiceItem[]
   serviceItemsNote?: string
   timelineTitle?: string
