@@ -8,30 +8,40 @@ import {
   ClipboardCheck,
   ClipboardList,
   Clock3,
+  Cross,
   FileText,
+  Flower,
   Flower2,
   Handshake,
   HeartHandshake,
   House,
+  Layers,
   MapPin,
   MapPinned,
   Navigation,
   Package,
+  PackageOpen,
   PackageCheck,
   Phone,
   Route,
   Ruler,
+  ShoppingBag,
+  Shirt,
+  Tag,
   Timer,
 } from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { monumentProducts } from '@/data/monuments'
+import { servicePages } from '@/data/service-pages'
 import type { ServicePage } from '@/types/content'
 import { createPhoneLink } from '@/utils/contact-links'
 
 const props = defineProps<{
   page: ServicePage
 }>()
+
+const isRitualProductsPage = props.page.id === 'ritualnye-tovary'
 
 usePageSeo({
   title: props.page.metaTitle,
@@ -98,6 +108,18 @@ const serviceItemIcons = {
   packageCheck: PackageCheck,
   building2: Building2,
   route: Route,
+  shoppingBag: ShoppingBag,
+} as const
+
+const productCategoryIcons = {
+  box: Package,
+  flower2: Flower2,
+  cross: Cross,
+  layers: Layers,
+  shirt: Shirt,
+  tag: Tag,
+  flower: Flower,
+  packageOpen: PackageOpen,
 } as const
 
 const activeTimelineStep = ref('')
@@ -112,6 +134,50 @@ const currentTimelineStep = computed(
   () =>
     props.page.timelineSteps?.find(step => step.title === activeTimelineStep.value)
     ?? props.page.timelineSteps?.[0],
+)
+
+const whereToBuyLocations = computed(() =>
+  isRitualProductsPage
+    ? contacts.address
+      .split(';')
+      .map(address => address.trim())
+      .filter(Boolean)
+      .map(address => ({
+        title: 'Наш адрес в Мариуполе',
+        address,
+        phone: contacts.phone,
+        routeQuery: address,
+      }))
+    : [],
+)
+
+const relatedServiceIcons = {
+  ambulance: Ambulance,
+  car: Car,
+  clipboardCheck: ClipboardCheck,
+  landmark: Building2,
+} as const
+
+const resolvedRelatedServices = computed(() =>
+  props.page.relatedServices
+    ? {
+      ...props.page.relatedServices,
+      items: props.page.relatedServices.items
+        .map((item) => {
+          const targetPage = servicePages[item.pageKey]
+
+          if (!targetPage || targetPage.path === props.page.path) {
+            return null
+          }
+
+          return {
+            ...item,
+            href: targetPage.path,
+          }
+        })
+        .filter((item): item is NonNullable<typeof item> => Boolean(item)),
+    }
+    : null,
 )
 
 const routeUrl = 'https://maps.google.com/?q='
@@ -145,12 +211,15 @@ useSchemaOrg([
   <div>
     <PageHero
       :title="page.h1"
-      :description="page.summary"
+      :description="page.heroDescription ?? page.summary"
       :phone="page.phone"
       :primary-action-label="page.primaryActionLabel"
+      :primary-action-href="page.primaryActionHref"
       :secondary-action-label="page.secondaryActionLabel"
       :secondary-action-href="page.secondaryActionHref"
+      :secondary-action-is-phone="page.secondaryActionIsPhone"
       :benefits="page.benefits"
+      :benefits-inline="page.benefitsInline"
       :highlight-text="page.highlightText"
       :description-secondary="page.descriptionSecondary"
       :promo="page.promo"
@@ -158,15 +227,360 @@ useSchemaOrg([
       :eyebrow="page.eyebrow"
       :image-src="page.imageSrc"
       :image-alt="page.imageAlt"
-      show-phone
+      :show-image-placeholder="page.showImagePlaceholder"
+      :show-phone="!isRitualProductsPage"
     />
 
     <section class="section">
       <BaseContainer>
         <Breadcrumbs :items="page.breadcrumbs" />
 
+        <section
+          v-if="page.productCategories?.length"
+          id="ritual-products"
+          class="mt-8 scroll-mt-24"
+        >
+          <SectionHeading
+            :title="page.productCategoriesTitle ?? ''"
+            :description="page.productCategoriesDescription"
+          />
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <BaseCard
+              v-for="category in page.productCategories"
+              :key="category.title"
+              class="flex h-full flex-col overflow-hidden !p-0"
+            >
+              <div class="aspect-[16/10] border-b border-border bg-surface-alt">
+                <img
+                  v-if="category.imageSrc"
+                  :src="category.imageSrc"
+                  :alt="category.imageAlt"
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div
+                  v-else
+                  class="flex h-full w-full items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <div class="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-2xl border border-primary/15 bg-white text-primary shadow-sm">
+                    <component
+                      :is="productCategoryIcons[category.icon as keyof typeof productCategoryIcons]"
+                      :size="32"
+                      stroke-width="1.8"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="flex items-start gap-3">
+                  <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <component
+                      :is="productCategoryIcons[category.icon as keyof typeof productCategoryIcons]"
+                      :size="20"
+                      stroke-width="1.8"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <h3 class="text-xl leading-tight font-semibold text-foreground">
+                    {{ category.title }}
+                  </h3>
+                </div>
+
+                <p class="mt-4 flex-1 text-text-muted">
+                  {{ category.description }}
+                </p>
+
+                <BaseButton
+                  v-if="category.ctaType === 'link' && category.href"
+                  :href="category.href"
+                  variant="secondary"
+                  class="mt-6"
+                >
+                  {{ category.ctaLabel }}
+                </BaseButton>
+                <CallButton
+                  v-else-if="category.ctaType === 'phone'"
+                  :label="category.ctaLabel"
+                  variant="secondary"
+                  class="mt-6"
+                  full-width
+                />
+                <BaseButton
+                  v-else
+                  variant="secondary"
+                  disabled
+                  class="mt-6"
+                >
+                  {{ category.ctaLabel }}
+                </BaseButton>
+              </div>
+            </BaseCard>
+          </div>
+        </section>
+
+        <section
+          v-for="section in page.productSections"
+          :id="section.id"
+          :key="section.id"
+          class="mt-12 scroll-mt-24"
+        >
+          <div class="max-w-4xl">
+            <h2 class="max-w-3xl text-[2.2rem] leading-[1.12] sm:text-[2.5rem]">
+              {{ section.title }}
+            </h2>
+
+            <div class="mt-6 max-w-3xl space-y-4 text-lg leading-8 text-text-muted">
+              <p
+                v-for="paragraph in section.paragraphs"
+                :key="paragraph"
+              >
+                {{ paragraph }}
+              </p>
+            </div>
+
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <CallButton
+                :label="section.ctaLabel"
+                variant="secondary"
+              />
+              <p
+                v-if="section.ctaNote"
+                class="text-sm text-text-muted"
+              >
+                {{ section.ctaNote }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            v-if="section.products.length"
+            class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
+          >
+            <ProductCard
+              v-for="item in section.products"
+              :key="`${section.id}-${item.title}-${item.description}`"
+              :item="item"
+            />
+          </div>
+        </section>
+
+        <FuneralKitSection
+          v-if="page.funeralKit"
+          :block="page.funeralKit"
+          class="mt-12"
+        />
+
+        <section
+          v-if="isRitualProductsPage && page.reasonsTitle && page.reasonsItems?.length"
+          id="why-us"
+          class="mt-12 scroll-mt-24"
+        >
+          <SectionHeading
+            :title="page.reasonsTitle"
+            :description="page.reasonsDescription"
+          />
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <BaseCard
+              v-for="item in page.reasonsItems"
+              :key="item.title"
+              class="h-full"
+            >
+              <div class="flex items-start gap-4">
+                <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <component
+                    :is="serviceItemIcons[item.icon as keyof typeof serviceItemIcons]"
+                    :size="22"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-lg font-semibold text-foreground">
+                    {{ item.title }}
+                  </h3>
+                  <p class="mt-3 text-text-muted">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            </BaseCard>
+          </div>
+        </section>
+
+        <PurchaseStepsSection
+          v-if="isRitualProductsPage && page.purchaseSteps"
+          :block="page.purchaseSteps"
+          class="mt-12"
+        />
+
+        <section
+          v-if="isRitualProductsPage"
+          id="faq"
+          class="mt-12 scroll-mt-24"
+        >
+          <SectionHeading
+            :title="page.faqTitle ?? 'Частые вопросы'"
+            :description="page.faqDescription ?? 'Ответы будут уточняться по мере наполнения сайта.'"
+          />
+          <div class="mt-10">
+            <FaqAccordion :items="page.faq" :default-open-index="-1" />
+          </div>
+        </section>
+
+        <section
+          v-if="isRitualProductsPage && whereToBuyLocations.length"
+          id="where-to-buy"
+          class="mt-12 scroll-mt-24"
+        >
+          <SectionHeading
+            title="Где приобрести ритуальные товары в Мариуполе"
+            description="Ритуальные товары можно подобрать непосредственно у нас в Мариуполе. Перед посещением рекомендуем позвонить и уточнить наличие необходимых товаров."
+          />
+
+          <div class="mt-10 grid gap-6 md:grid-cols-2">
+            <BaseCard
+              v-for="location in whereToBuyLocations"
+              :key="location.address"
+              class="h-full"
+            >
+              <article>
+                <div class="flex items-start gap-4">
+                  <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <MapPin :size="22" aria-hidden="true" />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-lg font-semibold text-foreground">
+                      {{ location.title }}
+                    </p>
+
+                    <address class="mt-4 not-italic text-text-muted">
+                      {{ location.address }}
+                    </address>
+
+                    <div class="mt-4 flex items-start gap-3">
+                      <Phone :size="18" class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
+                      <a
+                        :href="createPhoneLink(location.phone)"
+                        class="font-semibold text-foreground no-underline"
+                      >
+                        {{ location.phone }}
+                      </a>
+                    </div>
+
+                    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                      <CallButton
+                        :phone="location.phone"
+                        label="Позвонить"
+                        variant="primary"
+                      />
+                      <BaseButton
+                        :href="`${routeUrl}${encodeURIComponent(location.routeQuery)}`"
+                        variant="secondary"
+                        external
+                      >
+                        <span class="inline-flex items-center gap-2">
+                          <Navigation :size="18" aria-hidden="true" />
+                          <span>Построить маршрут</span>
+                        </span>
+                      </BaseButton>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </BaseCard>
+          </div>
+        </section>
+
+        <section
+          v-if="resolvedRelatedServices?.items.length"
+          id="related-services"
+          class="mt-12 scroll-mt-24"
+        >
+          <SectionHeading
+            :title="resolvedRelatedServices.title"
+            :description="resolvedRelatedServices.description"
+          />
+
+          <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <NuxtLink
+              v-for="item in resolvedRelatedServices.items"
+              :key="item.href"
+              :to="item.href"
+              class="group block h-full no-underline"
+              :aria-label="item.title"
+            >
+              <BaseCard class="flex h-full flex-col transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:shadow-md">
+                <div class="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <component
+                    :is="relatedServiceIcons[item.icon]"
+                    :size="22"
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <h3 class="mt-5 text-xl leading-tight font-semibold text-foreground">
+                  {{ item.title }}
+                </h3>
+
+                <p class="mt-4 flex-1 text-text-muted">
+                  {{ item.description }}
+                </p>
+
+                <div class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                  <span>Подробнее</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </BaseCard>
+            </NuxtLink>
+          </div>
+        </section>
+
+        <section
+          v-if="page.finalCta"
+          id="final-cta"
+          class="mt-12 scroll-mt-24"
+        >
+          <BaseCard class="overflow-hidden border-primary/20 bg-primary/5">
+            <div class="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] lg:items-center">
+              <div class="max-w-3xl">
+                <h2 class="max-w-3xl text-[2rem] leading-[1.12] sm:text-[2.35rem]">
+                  {{ page.finalCta.title }}
+                </h2>
+                <p class="mt-5 text-[1.0625rem] leading-8 text-text-muted">
+                  {{ page.finalCta.description }}
+                </p>
+                <p
+                  v-if="page.finalCta.note"
+                  class="mt-4 text-text-muted"
+                >
+                  {{ page.finalCta.note }}
+                </p>
+              </div>
+
+              <div class="flex flex-col gap-3 lg:items-start lg:justify-center">
+                <CallButton
+                  :label="page.finalCta.primaryLabel"
+                  class="w-full lg:w-auto"
+                  full-width
+                />
+                <BaseButton
+                  v-if="page.finalCta.secondaryLabel && page.finalCta.secondaryHref"
+                  :href="page.finalCta.secondaryHref"
+                  variant="ghost"
+                  class="w-full justify-center lg:w-auto lg:justify-start"
+                >
+                  {{ page.finalCta.secondaryLabel }}
+                </BaseButton>
+              </div>
+            </div>
+          </BaseCard>
+        </section>
+
         <div
-          v-if="page.serviceItems?.length"
+          v-if="!isRitualProductsPage && page.serviceItems?.length"
           class="mt-8"
         >
           <template v-if="page.id === 'ritualny-transport'">
@@ -233,7 +647,7 @@ useSchemaOrg([
         </div>
 
         <div
-          v-if="page.timelineSteps?.length"
+          v-if="!isRitualProductsPage && page.timelineSteps?.length"
           class="mt-12"
         >
           <SectionHeading
@@ -480,7 +894,7 @@ useSchemaOrg([
         </BaseCard>
 
         <div
-          v-if="page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport'"
+          v-if="!isRitualProductsPage && page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport'"
           class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]"
         >
           <BaseCard>
@@ -555,7 +969,7 @@ useSchemaOrg([
     </section>
 
     <section
-      v-if="page.locations?.length"
+      v-if="!isRitualProductsPage && page.locations?.length"
       class="section bg-surface-alt"
     >
       <BaseContainer>
@@ -752,7 +1166,7 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section v-if="page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron'" class="section">
+    <section v-if="!isRitualProductsPage && page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron'" class="section">
       <BaseContainer>
         <template v-if="page.id === 'ritualny-transport' && page.orderSteps?.length">
           <SectionHeading
@@ -1023,7 +1437,10 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section class="section bg-surface-alt">
+    <section
+      v-if="!isRitualProductsPage"
+      class="section bg-surface-alt"
+    >
       <BaseContainer>
         <SectionHeading
           :title="page.faqTitle ?? 'Частые вопросы'"
@@ -1073,7 +1490,7 @@ useSchemaOrg([
       </BaseContainer>
     </section>
 
-    <section v-if="page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport'" class="section">
+    <section v-if="!isRitualProductsPage && page.id !== 'pamyatniki' && page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport'" class="section">
       <BaseContainer>
         <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
           <BaseCard>
@@ -1089,7 +1506,7 @@ useSchemaOrg([
     </section>
 
     <ContactBlock
-      v-if="page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport'"
+      v-if="page.id !== 'organizaciya-pohoron' && page.id !== 'ritualny-transport' && !isRitualProductsPage"
       :phone="page.phone"
       :show-telegram="page.id !== 'pamyatniki'"
     />
