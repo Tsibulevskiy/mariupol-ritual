@@ -32,6 +32,8 @@ const toggleItem = (index: number) => {
         type="button"
         class="flex min-h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-lg text-left font-serif text-lg font-semibold"
         :aria-expanded="openIndex === index"
+        :aria-controls="`faq-answer-${index}`"
+        :id="`faq-question-${index}`"
         @click="toggleItem(index)"
       >
         <span class="flex items-center gap-3">
@@ -44,6 +46,8 @@ const toggleItem = (index: number) => {
         </span>
       </button>
       <div
+        :id="`faq-answer-${index}`"
+        :aria-labelledby="`faq-question-${index}`"
         class="grid transition-all duration-200 ease-out"
         :class="openIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
       >

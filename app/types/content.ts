@@ -29,6 +29,28 @@ export interface RelatedLink {
   href: string
 }
 
+export interface RelatedServiceItem {
+  pageKey: string
+  title: string
+  description: string
+  icon: 'clipboardCheck' | 'car' | 'landmark' | 'ambulance'
+}
+
+export interface RelatedServicesBlock {
+  title: string
+  description: string
+  items: RelatedServiceItem[]
+}
+
+export interface FinalCtaBlock {
+  title: string
+  description: string
+  note?: string
+  primaryLabel: string
+  secondaryLabel?: string
+  secondaryHref?: string
+}
+
 export interface HeroBenefit {
   icon: string
   label: string
@@ -64,6 +86,74 @@ export interface ServiceItem {
   title: string
   description: string
   icon: string
+}
+
+export interface ProductCategoryItem {
+  title: string
+  description: string
+  icon: string
+  imageSrc?: string
+  imageAlt: string
+  ctaLabel: string
+  ctaType?: 'link' | 'phone' | 'disabled'
+  href?: string
+  futureHref?: string
+}
+
+export interface ProductSectionItem {
+  title: string
+  description: string
+  imageSrc?: string
+  imageAlt?: string
+  imageFit?: 'cover' | 'contain'
+  price?: string
+  ctaLabel: string
+  placeholderIcon?: 'box' | 'flower2' | 'cross' | 'bed' | 'layers' | 'square' | 'package'
+}
+
+export interface ProductSection {
+  id: string
+  title: string
+  paragraphs: string[]
+  ctaLabel: string
+  ctaNote?: string
+  products: ProductSectionItem[]
+}
+
+export interface FuneralKitItem {
+  title: string
+  description: string
+  icon: 'box' | 'bed' | 'layers' | 'cross' | 'flower2' | 'package'
+}
+
+export interface FuneralKitBlock {
+  id: string
+  title: string
+  paragraphs: string[]
+  items: FuneralKitItem[]
+  note: string
+  ctaLabel: string
+  ctaSecondaryLabel?: string
+  ctaSecondaryHref?: string
+  ctaDescription: string
+}
+
+export interface PurchaseStepItem {
+  number: '01' | '02' | '03'
+  title: string
+  description: string
+  icon: 'phone' | 'package' | 'badgeCheck'
+}
+
+export interface PurchaseStepsBlock {
+  id: string
+  title: string
+  description: string
+  items: PurchaseStepItem[]
+  ctaLabel: string
+  ctaSecondaryLabel?: string
+  ctaSecondaryHref?: string
+  ctaDescription?: string
 }
 
 export interface ServiceBenefitItem {
@@ -102,10 +192,14 @@ export interface ServicePage {
   metaTitle: string
   metaDescription: string
   phone?: string
+  heroDescription?: string
   primaryActionLabel?: string
+  primaryActionHref?: string
   secondaryActionLabel?: string
   secondaryActionHref?: string
+  secondaryActionIsPhone?: boolean
   benefits?: HeroBenefit[]
+  benefitsInline?: boolean
   highlightText?: string
   descriptionSecondary?: string
   promo?: HeroPromo
@@ -113,6 +207,13 @@ export interface ServicePage {
   eyebrow?: string
   imageSrc?: string
   imageAlt?: string
+  showImagePlaceholder?: boolean
+  productCategoriesTitle?: string
+  productCategoriesDescription?: string
+  productCategories?: ProductCategoryItem[]
+  productSections?: ProductSection[]
+  funeralKit?: FuneralKitBlock
+  purchaseSteps?: PurchaseStepsBlock
   serviceItemsTitle?: string
   serviceItemsDescription?: string
   highlightSectionTitle?: string
@@ -121,6 +222,7 @@ export interface ServicePage {
   geographyDescription?: string
   geographyDirections?: string[]
   reasonsTitle?: string
+  reasonsDescription?: string
   reasonsItems?: ServiceBenefitItem[]
   orderStepsTitle?: string
   orderSteps?: ServiceOrderStep[]
@@ -143,6 +245,8 @@ export interface ServicePage {
   separatePayment: string[]
   serviceAreas: string[]
   faq: Faq[]
+  relatedServices?: RelatedServicesBlock
+  finalCta?: FinalCtaBlock
   relatedLinks: RelatedLink[]
   breadcrumbs: BreadcrumbItem[]
 }

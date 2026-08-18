@@ -8,7 +8,6 @@ const hiddenDraftRoutes = [
   '/o-kompanii',
   '/perevozka-umershih-mariupol',
   '/pohorony-pod-klyuch-mariupol',
-  '/ritualnye-tovary-mariupol',
   '/ritualnye-uslugi-mariupol',
 ] as const
 

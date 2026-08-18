@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box, CarFront, Clock3, Gift, HandHelping, MapPin, Phone, Truck } from 'lucide-vue-next'
+import { BadgeCheck, Box, CarFront, Clock3, Gift, HandHelping, MapPin, Package, Phone, Truck, Wallet } from 'lucide-vue-next'
 import { contacts } from '@/config/contacts'
 import type { HeroBenefit, HeroPromo } from '@/types/content'
 import { createPhoneLink } from '@/utils/contact-links'
@@ -8,10 +8,13 @@ const benefitIcons = {
   clock: Clock3,
   truck: Truck,
   box: Box,
+  package: Package,
   handHelping: HandHelping,
+  badgeCheck: BadgeCheck,
   phone: Phone,
   mapPin: MapPin,
   carFront: CarFront,
+  wallet: Wallet,
 } as const
 
 withDefaults(
@@ -20,9 +23,12 @@ withDefaults(
     description: string
     phone?: string
     primaryActionLabel?: string
+    primaryActionHref?: string
     secondaryActionLabel?: string
     secondaryActionHref?: string
+    secondaryActionIsPhone?: boolean
     benefits?: HeroBenefit[]
+    benefitsInline?: boolean
     highlightText?: string
     descriptionSecondary?: string
     promo?: HeroPromo
@@ -32,13 +38,17 @@ withDefaults(
     showPhone?: boolean
     imageSrc?: string
     imageAlt?: string
+    showImagePlaceholder?: boolean
   }>(),
   {
     phone: contacts.phone,
     primaryActionLabel: 'Позвонить сейчас',
+    primaryActionHref: undefined,
     secondaryActionLabel: 'Узнать стоимость',
     secondaryActionHref: '#contact-form',
+    secondaryActionIsPhone: false,
     benefits: () => [],
+    benefitsInline: false,
     highlightText: undefined,
     descriptionSecondary: undefined,
     promo: undefined,
@@ -48,6 +58,7 @@ withDefaults(
     showPhone: false,
     imageSrc: undefined,
     imageAlt: '',
+    showImagePlaceholder: false,
   },
 )
 </script>
@@ -64,7 +75,7 @@ withDefaults(
         :class="[
           'grid gap-10',
           promo ? 'lg:items-start' : 'items-center',
-          imageSrc
+          imageSrc || showImagePlaceholder
             ? 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]'
             : promo
               ? 'lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)]'
@@ -120,6 +131,24 @@ withDefaults(
           >
             {{ descriptionSecondary }}
           </p>
+          <ul
+            v-if="benefits.length && benefitsInline"
+            class="mt-6 flex flex-wrap gap-3"
+          >
+            <li v-for="benefit in benefits" :key="benefit.label">
+              <div class="inline-flex min-h-11 items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 shadow-sm">
+                <component
+                  :is="benefitIcons[benefit.icon as keyof typeof benefitIcons]"
+                  :size="18"
+                  class="shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <span class="text-sm font-medium text-foreground sm:text-base">
+                  {{ benefit.label }}
+                </span>
+              </div>
+            </li>
+          </ul>
           <div
             v-if="showPhone"
             class="mt-6 inline-flex w-full max-w-[360px] flex-col rounded-2xl border border-primary/20 bg-primary/5 px-5 py-4 shadow-md ring-1 ring-primary/10"
@@ -136,19 +165,31 @@ withDefaults(
             </a>
           </div>
           <div v-if="showActions" class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <CallButton :phone="phone" :label="primaryActionLabel" />
             <BaseButton
-              v-if="secondaryActionLabel"
+              v-if="primaryActionHref"
+              :href="primaryActionHref"
+            >
+              {{ primaryActionLabel }}
+            </BaseButton>
+            <CallButton v-else :phone="phone" :label="primaryActionLabel" />
+            <BaseButton
+              v-if="secondaryActionLabel && !secondaryActionIsPhone"
               :href="secondaryActionHref"
               variant="secondary"
             >
               {{ secondaryActionLabel }}
             </BaseButton>
+            <CallButton
+              v-if="secondaryActionLabel && secondaryActionIsPhone"
+              :phone="phone"
+              :label="secondaryActionLabel"
+              variant="secondary"
+            />
           </div>
         </div>
 
         <div
-          v-if="promo || imageSrc"
+          v-if="promo || imageSrc || showImagePlaceholder"
           class="flex flex-col gap-6 lg:items-end"
         >
           <div
@@ -195,11 +236,28 @@ withDefaults(
               loading="eager"
             />
           </div>
+
+          <div
+            v-else-if="showImagePlaceholder"
+            class="flex min-h-[280px] w-full items-end overflow-hidden rounded-2xl border border-dashed border-primary/25 bg-surface-alt p-6 shadow-sm sm:min-h-[360px] lg:min-h-[420px]"
+          >
+            <div class="max-w-sm">
+              <p class="text-sm font-semibold tracking-wider text-primary uppercase">
+                Место под фото
+              </p>
+              <p class="mt-3 text-2xl leading-tight font-semibold text-foreground">
+                Реальная фотография магазина или ритуальных товаров
+              </p>
+              <p class="mt-4 text-sm leading-6 text-text-muted">
+                Подготовлен блок под горизонтальное изображение без стоковых материалов.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
       <div
-        v-if="benefits.length"
+        v-if="benefits.length && !benefitsInline"
         class="mt-10 rounded-2xl border border-border bg-surface-alt p-4 shadow-sm sm:p-5"
       >
         <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
