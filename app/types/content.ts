@@ -106,6 +106,7 @@ export interface ProductSectionItem {
   imageSrc?: string
   imageAlt?: string
   imageFit?: 'cover' | 'contain'
+  imagePadding?: 'default' | 'none'
   price?: string
   ctaLabel: string
   placeholderIcon?: 'box' | 'flower2' | 'cross' | 'bed' | 'layers' | 'square' | 'package'
@@ -117,6 +118,7 @@ export interface ProductSection {
   paragraphs: string[]
   ctaLabel: string
   ctaNote?: string
+  productsFootnote?: string
   products: ProductSectionItem[]
 }
 
