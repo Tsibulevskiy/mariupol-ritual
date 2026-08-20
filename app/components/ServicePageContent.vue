@@ -34,8 +34,9 @@ import { contacts } from '@/config/contacts'
 import { siteConfig } from '@/config/site'
 import { monumentProducts } from '@/data/monuments'
 import { servicePages } from '@/data/service-pages'
-import type { ServicePage } from '@/types/content'
+import type { ProductSection, ServicePage } from '@/types/content'
 import { createPhoneLink } from '@/utils/contact-links'
+import type { ComponentPublicInstance } from 'vue'
 
 const props = defineProps<{
   page: ServicePage
@@ -123,6 +124,7 @@ const productCategoryIcons = {
 } as const
 
 const activeTimelineStep = ref('')
+const expandedDesktopSections = ref<string[]>([])
 
 watchEffect(() => {
   if (!activeTimelineStep.value) {
@@ -135,6 +137,140 @@ const currentTimelineStep = computed(
     props.page.timelineSteps?.find(step => step.title === activeTimelineStep.value)
     ?? props.page.timelineSteps?.[0],
 )
+
+const mobileSliderSectionIds = ['groby', 'ritualnye-venki', 'kresty', 'ritualny-tekstil'] as const
+const desktopLimitedSectionIds = ['groby', 'ritualnye-venki', 'kresty'] as const
+const mobileSliderRefs = ref<Record<string, HTMLElement | null>>({})
+const mobileSliderResumeTimeouts = new Map<string, ReturnType<typeof window.setTimeout>>()
+let mobileSliderInterval: ReturnType<typeof window.setInterval> | null = null
+
+const mobileSlidesBySection = computed(() =>
+  Object.fromEntries(
+    mobileSliderSectionIds.map((sectionId) => {
+      const section = props.page.productSections?.find(item => item.id === sectionId)
+
+      return [sectionId, section ? [...section.products, ...section.products] : []]
+    }),
+  ) as Record<(typeof mobileSliderSectionIds)[number], NonNullable<ServicePage['productSections']>[number]['products']>
+)
+
+const isMobileSliderSection = (sectionId: string) => mobileSliderSectionIds.includes(sectionId as (typeof mobileSliderSectionIds)[number])
+
+const getDesktopSectionProducts = (section: ProductSection) =>
+  isDesktopLimitedSection(section.id) && !expandedDesktopSections.value.includes(section.id)
+    ? section.products.slice(0, 4)
+    : section.products
+
+const isDesktopLimitedSection = (sectionId: string) => desktopLimitedSectionIds.includes(sectionId as (typeof desktopLimitedSectionIds)[number])
+
+const canShowMoreDesktopProducts = (section: ProductSection) =>
+  isDesktopLimitedSection(section.id)
+  && section.products.length > 4
+  && !expandedDesktopSections.value.includes(section.id)
+
+const expandDesktopSection = (sectionId: string) => {
+  if (!expandedDesktopSections.value.includes(sectionId)) {
+    expandedDesktopSections.value = [...expandedDesktopSections.value, sectionId]
+  }
+}
+
+const setMobileSliderRef = (sectionId: string, element: Element | ComponentPublicInstance | null) => {
+  mobileSliderRefs.value[sectionId] = element instanceof HTMLElement ? element : null
+}
+
+const getMobileSliderStepWidth = (sliderElement: HTMLElement) => {
+  const firstSlide = sliderElement.querySelector<HTMLElement>('.coffins-slide')
+
+  if (!firstSlide) {
+    return 0
+  }
+
+  const sliderGap = Number.parseFloat(window.getComputedStyle(sliderElement.firstElementChild as Element).gap || '0')
+
+  return firstSlide.offsetWidth + sliderGap
+}
+
+const getOriginalMobileSlideCount = (sectionId: (typeof mobileSliderSectionIds)[number]) =>
+  props.page.productSections?.find(section => section.id === sectionId)?.products.length ?? 0
+
+const normalizeMobileSliderPosition = (sectionId: (typeof mobileSliderSectionIds)[number]) => {
+  const sliderElement = mobileSliderRefs.value[sectionId]
+
+  if (!sliderElement) {
+    return
+  }
+
+  const stepWidth = getMobileSliderStepWidth(sliderElement)
+  const originalSlideCount = getOriginalMobileSlideCount(sectionId)
+
+  if (!stepWidth || originalSlideCount < 2) {
+    return
+  }
+
+  const loopWidth = stepWidth * originalSlideCount
+
+  if (sliderElement.scrollLeft >= loopWidth) {
+    sliderElement.scrollLeft -= loopWidth
+  }
+}
+
+const scheduleMobileSliderResume = (sectionId: string) => {
+  const currentTimeout = mobileSliderResumeTimeouts.get(sectionId)
+
+  if (currentTimeout) {
+    window.clearTimeout(currentTimeout)
+  }
+
+  mobileSliderResumeTimeouts.set(
+    sectionId,
+    window.setTimeout(() => {
+      mobileSliderResumeTimeouts.delete(sectionId)
+    }, 3200),
+  )
+}
+
+const autoAdvanceMobileSliders = () => {
+  mobileSliderSectionIds.forEach((sectionId) => {
+    if (mobileSliderResumeTimeouts.has(sectionId)) {
+      return
+    }
+
+    const sliderElement = mobileSliderRefs.value[sectionId]
+
+    if (!sliderElement) {
+      return
+    }
+
+    const stepWidth = getMobileSliderStepWidth(sliderElement)
+    const originalSlideCount = getOriginalMobileSlideCount(sectionId)
+
+    if (!stepWidth || originalSlideCount < 2) {
+      return
+    }
+
+    normalizeMobileSliderPosition(sectionId)
+
+    const nextIndex = Math.round(sliderElement.scrollLeft / stepWidth) + 1
+
+    sliderElement.scrollTo({
+      left: nextIndex * stepWidth,
+      behavior: 'smooth',
+    })
+  })
+}
+
+onMounted(() => {
+  mobileSliderInterval = window.setInterval(autoAdvanceMobileSliders, 4600)
+})
+
+onBeforeUnmount(() => {
+  if (mobileSliderInterval !== null) {
+    window.clearInterval(mobileSliderInterval)
+  }
+
+  mobileSliderResumeTimeouts.forEach(timeoutId => window.clearTimeout(timeoutId))
+  mobileSliderResumeTimeouts.clear()
+})
 
 const whereToBuyLocations = computed(() =>
   isRitualProductsPage
@@ -355,16 +491,72 @@ useSchemaOrg([
             </div>
           </div>
 
-          <div
-            v-if="section.products.length"
-            class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
-          >
-            <ProductCard
-              v-for="item in section.products"
-              :key="`${section.id}-${item.title}-${item.description}`"
-              :item="item"
-            />
-          </div>
+          <template v-if="section.products.length">
+            <div
+              v-if="isMobileSliderSection(section.id)"
+              class="mt-8 md:hidden"
+            >
+              <div
+                :ref="element => setMobileSliderRef(section.id, element)"
+                class="coffins-slider-shell"
+                @touchstart="scheduleMobileSliderResume(section.id)"
+                @touchmove="scheduleMobileSliderResume(section.id)"
+                @touchend="scheduleMobileSliderResume(section.id)"
+                @touchcancel="scheduleMobileSliderResume(section.id)"
+                @pointerdown="scheduleMobileSliderResume(section.id)"
+                @pointermove="scheduleMobileSliderResume(section.id)"
+                @pointerup="scheduleMobileSliderResume(section.id)"
+                @pointercancel="scheduleMobileSliderResume(section.id)"
+                @scroll="() => {
+                  scheduleMobileSliderResume(section.id)
+                  normalizeMobileSliderPosition(section.id as (typeof mobileSliderSectionIds)[number])
+                }"
+              >
+                <div class="coffins-slider-track">
+                  <div
+                    v-for="(item, index) in mobileSlidesBySection[section.id as keyof typeof mobileSlidesBySection]"
+                    :key="`${section.id}-${item.title}-${item.description}-${index}`"
+                    class="coffins-slide"
+                  >
+                    <ProductCard :item="item" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              :class="isMobileSliderSection(section.id)
+                ? 'mt-8 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-4'
+                : 'mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4'"
+            >
+              <div
+                v-for="item in getDesktopSectionProducts(section)"
+                :key="`${section.id}-${item.title}-${item.description}`"
+                class="h-full"
+              >
+                <ProductCard :item="item" />
+              </div>
+            </div>
+
+            <div
+              v-if="canShowMoreDesktopProducts(section)"
+              class="mt-6 hidden md:flex md:justify-center"
+            >
+              <BaseButton
+                variant="secondary"
+                @click="expandDesktopSection(section.id)"
+              >
+                Загрузить ещё
+              </BaseButton>
+            </div>
+
+            <p
+              v-if="section.productsFootnote"
+              class="mt-4 text-sm text-text-muted"
+            >
+              {{ section.productsFootnote }}
+            </p>
+          </template>
         </section>
 
         <FuneralKitSection
@@ -1512,3 +1704,32 @@ useSchemaOrg([
     />
   </div>
 </template>
+
+<style scoped>
+.coffins-slider-shell {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.coffins-slider-shell::-webkit-scrollbar {
+  display: none;
+}
+
+.coffins-slider-track {
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  gap: 1rem;
+}
+
+.coffins-slide {
+  width: min(84vw, 22rem);
+  display: flex;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+</style>

@@ -18,7 +18,7 @@ const placeholderIcons = {
 </script>
 
 <template>
-  <article>
+  <article class="h-full">
     <BaseCard class="flex h-full flex-col overflow-hidden !p-0">
       <div class="aspect-[16/10] border-b border-border bg-surface-alt">
         <img
@@ -26,7 +26,9 @@ const placeholderIcons = {
           :src="item.imageSrc"
           :alt="item.imageAlt ?? ''"
           :class="item.imageFit === 'contain'
-            ? 'h-full w-full bg-surface-alt p-4 object-contain'
+            ? item.imagePadding === 'none'
+              ? 'h-full w-full bg-surface-alt object-contain'
+              : 'h-full w-full bg-surface-alt p-4 object-contain'
             : 'h-full w-full object-cover'"
           loading="lazy"
         />
