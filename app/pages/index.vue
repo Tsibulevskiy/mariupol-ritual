@@ -21,7 +21,7 @@ usePageSeo({
 
 const runtimeConfig = useRuntimeConfig()
 const canonical = new URL('/', runtimeConfig.public.siteUrl).toString()
-const routeUrl = 'https://maps.google.com/?q='
+const routeUrl = 'https://yandex.ru/maps/?text='
 
 const aboutReasons = [
   'Более 10 лет опыта',
