@@ -1342,7 +1342,7 @@ export const servicePages: Record<string, ServicePage> = {
     promo: {
       title:
         'При заказе памятников, художественная резка в подарок!',
-      note: 'Акция действует до 01.09.2026',
+      note: 'Акция действует до 01.10.2026',
     },
     eyebrow: 'Памятники и мемориальные решения',
     summary:
