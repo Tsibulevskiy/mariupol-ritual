@@ -46,6 +46,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   devtools: { enabled: true },
   runtimeConfig: {
+    adminUsername: process.env.NUXT_ADMIN_USERNAME || '',
+    adminPassword: process.env.NUXT_ADMIN_PASSWORD || '',
+    adminSessionSecret: process.env.NUXT_ADMIN_SESSION_SECRET || '',
+    bannerDbPath: process.env.NUXT_BANNER_DB_PATH || '',
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       yandexMetrikaId: process.env.NUXT_PUBLIC_YANDEX_METRIKA_ID || '',
@@ -64,10 +68,22 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
   ],
   robots: {
-    disallow: [...hiddenDraftRoutes],
+    disallow: [...hiddenDraftRoutes, '/admin', '/admin/**'],
+  },
+  routeRules: {
+    '/api/banner': {
+      headers: {
+        'cache-control': 'no-store',
+      },
+    },
+    '/admin/**': {
+      headers: {
+        'x-robots-tag': 'noindex, nofollow',
+      },
+    },
   },
   sitemap: {
-    exclude: [...hiddenDraftRoutes],
+    exclude: [...hiddenDraftRoutes, '/admin', '/admin/**'],
     zeroRuntime: true,
   },
   vite: {
