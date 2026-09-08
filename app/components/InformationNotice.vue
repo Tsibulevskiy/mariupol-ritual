@@ -1,16 +1,32 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Info } from 'lucide-vue-next'
+import BannerRichTextRenderer from '@/components/BannerRichTextRenderer.vue'
+import { bannerTextToDocument, type BannerRichTextDocument } from '@/utils/banner-rich-text'
 
 interface Notice {
   title: string
   text: string
+  contentJson?: string
   linkText?: string
   linkUrl?: string
 }
 
-defineProps<{
+const props = defineProps<{
   notice: Notice
 }>()
+
+const documentValue = computed<BannerRichTextDocument>(() => {
+  if (props.notice.contentJson) {
+    try {
+      return JSON.parse(props.notice.contentJson) as BannerRichTextDocument
+    } catch {
+      return bannerTextToDocument(props.notice.text || '')
+    }
+  }
+
+  return bannerTextToDocument(props.notice.text || '')
+})
 </script>
 
 <template>
@@ -31,9 +47,9 @@ defineProps<{
           <p class="text-sm leading-5 font-semibold text-text-heading">
             {{ notice.title }}
           </p>
-          <p class="text-sm leading-5 text-text">
-            {{ notice.text }}
-          </p>
+          <div class="text-sm leading-5 text-text">
+            <BannerRichTextRenderer :document="documentValue" />
+          </div>
         </div>
         <NuxtLink
           v-if="notice.linkText && notice.linkUrl && notice.linkUrl.startsWith('/')"
