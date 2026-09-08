@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import BannerRichTextEditor from '@/components/BannerRichTextEditor.vue'
+import {
+  bannerTextToDocument,
+  bannerRichTextPlainText,
+  type BannerRichTextDocument,
+} from '@/utils/banner-rich-text'
+
 interface BannerForm {
   enabled: boolean
   title: string
   text: string
+  contentJson: string
   linkText: string
   linkUrl: string
   startsAt: string
@@ -27,6 +35,7 @@ const form = reactive<BannerForm>({
   enabled: false,
   title: 'Важная информация',
   text: '',
+  contentJson: '',
   linkText: '',
   linkUrl: '',
   startsAt: '',
@@ -42,13 +51,14 @@ const error = ref('')
 const previewNotice = computed(() => ({
   title: form.title || 'Важная информация',
   text: form.text || 'Текст информационного сообщения',
+  contentJson: form.contentJson,
   linkText: form.linkText,
   linkUrl: form.linkUrl,
 }))
 
 const loadBanner = async () => {
   const data = await $fetch<BannerForm>('/api/admin/banner')
-  Object.assign(form, toDatetimeLocalForm(data))
+  Object.assign(form, toDatetimeLocalForm(normalizeBanner(data)))
 }
 
 onMounted(async () => {
@@ -96,7 +106,7 @@ const save = async () => {
       method: 'PUT',
       body: toApiPayload(form),
     })
-    Object.assign(form, toDatetimeLocalForm(data))
+    Object.assign(form, toDatetimeLocalForm(normalizeBanner(data)))
     message.value = 'Изменения сохранены'
   } catch {
     error.value = 'Не удалось сохранить изменения. Проверьте заполненные поля.'
@@ -109,6 +119,9 @@ const toApiPayload = (value: BannerForm) => ({
   ...value,
   startsAt: fromDatetimeLocal(value.startsAt),
   endsAt: fromDatetimeLocal(value.endsAt),
+  text: value.contentJson
+    ? bannerRichTextPlainText(JSON.parse(value.contentJson) as BannerRichTextDocument)
+    : value.text,
 })
 
 const toDatetimeLocalForm = (value: BannerForm) => ({
@@ -116,6 +129,16 @@ const toDatetimeLocalForm = (value: BannerForm) => ({
   startsAt: toDatetimeLocal(value.startsAt),
   endsAt: toDatetimeLocal(value.endsAt),
 })
+
+const normalizeBanner = (value: BannerForm) => {
+  if (value.contentJson) return value
+
+  const document = bannerTextToDocument(value.text)
+  return {
+    ...value,
+    contentJson: JSON.stringify(document),
+  }
+}
 
 const toDatetimeLocal = (value: string) => {
   if (!value) return ''
@@ -224,8 +247,8 @@ const fromDatetimeLocal = (value: string) => {
               id="banner-title"
               v-model="form.title"
               maxlength="60"
+              placeholder="Важная информация"
               class="min-h-12 w-full rounded-xl border border-border bg-surface px-4 py-3"
-              required
             />
           </div>
 
@@ -233,14 +256,13 @@ const fromDatetimeLocal = (value: string) => {
             <label for="banner-text" class="mb-2 block font-semibold">
               Текст
             </label>
-            <textarea
-              id="banner-text"
-              v-model="form.text"
-              maxlength="220"
-              rows="4"
-              class="w-full rounded-xl border border-border bg-surface px-4 py-3"
-              required
+            <BannerRichTextEditor
+              v-model="form.contentJson"
+              class="block"
             />
+            <p class="mt-2 text-sm text-text-muted">
+              Поддерживаются переносы строк, bold и ограниченные цвета.
+            </p>
           </div>
 
           <div class="grid gap-5 sm:grid-cols-2">
