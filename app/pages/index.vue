@@ -9,6 +9,7 @@ import {
   Users,
 } from 'lucide-vue-next'
 import type { Faq, PricePackage, Service } from '@/types/content'
+import { monumentsPromotion } from '@/data/service-pages'
 import { contacts } from '@/config/contacts'
 import { createPhoneLink } from '@/utils/contact-links'
 
@@ -84,12 +85,12 @@ const services: Service[] = [
     icon: 'box',
   },
   {
-    id: 'documents-help',
-    slug: 'chto-delat-esli-umer-chelovek',
-    name: 'Помощь с документами',
+    id: 'monuments',
+    slug: 'pamyatniki-mariupol',
+    name: 'Памятники',
     description:
-      'Объясняем, какие документы могут потребоваться для организации похорон и в каком порядке необходимо действовать. Помогаем разобраться в последовательности оформления и подсказываем, куда обращаться в конкретной ситуации. Перечень документов уточняется индивидуально.',
-    icon: 'fileText',
+      'Помогаем подобрать и заказать памятник в Мариуполе: согласовываем материал, размер, оформление, гравировку и установку с учётом пожеланий семьи.',
+    icon: 'landmark',
   },
   {
     id: 'turnkey-funeral',
@@ -553,7 +554,7 @@ useSchemaOrg([
             v-for="service in services"
             :key="service.id"
             :service="service"
-            :href="['organizaciya-pohoron-mariupol', 'ritualny-transport-mariupol', 'ritualnye-tovary-mariupol'].includes(service.slug) ? `/${service.slug}` : undefined"
+            :href="['organizaciya-pohoron-mariupol', 'ritualny-transport-mariupol', 'ritualnye-tovary-mariupol', 'pamyatniki-mariupol'].includes(service.slug) ? `/${service.slug}` : undefined"
             mobile-expandable
           />
         </div>
@@ -941,7 +942,7 @@ useSchemaOrg([
 
     <TrustBlock />
 
-    <section id="about-company" class="section bg-[#22384D]">
+    <section id="about-company" class="section scroll-mt-24 bg-[#22384D]">
       <BaseContainer>
         <div class="grid gap-8 xl:grid-cols-[1.2fr_0.8fr] xl:items-start">
           <div class="max-w-4xl">
@@ -1129,7 +1130,7 @@ useSchemaOrg([
         <p class="mt-6 text-sm text-text-muted">
           <span class="font-semibold text-text">Акция!</span>
           При заказе памятников, художественная резка в подарок! Акция
-          действует до 01.09.2026.
+          {{ monumentsPromotion.note }}.
         </p>
       </BaseContainer>
     </section>

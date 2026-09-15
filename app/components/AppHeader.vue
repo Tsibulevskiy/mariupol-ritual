@@ -8,11 +8,15 @@ const menuButton = ref<HTMLButtonElement>()
 const route = useRoute()
 const headerPhone = computed(() => getPhoneByPath(route.path))
 
+const isNavigationItemActive = (href: string) =>
+  route.path === href
+  || (href === '/pamyatniki-mariupol' && route.path.startsWith(`${href}/`))
+
 const navigation = [
-  { label: 'Услуги', href: '/#services' },
-  { label: 'Каталог памятников', href: '/pamyatniki-mariupol#catalog' },
-  { label: 'Цены', href: '/#service-packages' },
-  { label: 'Что делать', href: '/#faq' },
+  { label: 'Похороны', href: '/organizaciya-pohoron-mariupol' },
+  { label: 'Товары', href: '/ritualnye-tovary-mariupol' },
+  { label: 'Транспорт', href: '/ritualny-transport-mariupol' },
+  { label: 'Памятники', href: '/pamyatniki-mariupol' },
   { label: 'О компании', href: '/#about-company' },
 ]
 
@@ -64,7 +68,10 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
             :key="item.href"
             :to="item.href"
             class="inline-flex min-h-11 items-center text-sm font-medium text-text no-underline hover:text-primary"
-            :aria-current="route.path === item.href ? 'page' : undefined"
+            :class="isNavigationItemActive(item.href)
+              ? 'relative after:absolute after:right-0 after:bottom-1 after:left-0 after:h-px after:bg-primary after:content-[\'\']'
+              : ''"
+            :aria-current="isNavigationItemActive(item.href) ? 'page' : undefined"
           >
             {{ item.label }}
           </NuxtLink>
@@ -106,7 +113,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
           :key="item.href"
           :to="item.href"
           class="block rounded-lg px-3 py-3 font-medium text-text no-underline hover:bg-surface-alt"
-          :aria-current="route.path === item.href ? 'page' : undefined"
+          :aria-current="isNavigationItemActive(item.href) ? 'page' : undefined"
           @click="closeMenu()"
         >
           {{ item.label }}
