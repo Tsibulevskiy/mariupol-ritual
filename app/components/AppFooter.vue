@@ -15,7 +15,7 @@ const footerPhone = computed(() => getPhoneByPath(route.path))
     class="border-t border-[color:var(--color-primary-hover)] bg-[var(--color-background-dark)] py-12 text-white"
   >
     <BaseContainer>
-      <div class="grid gap-8 md:grid-cols-3">
+      <div class="grid gap-8 md:grid-cols-4">
         <div>
           <div>
             <img
@@ -57,6 +57,13 @@ const footerPhone = computed(() => getPhoneByPath(route.path))
             </div>
           </div>
         </div>
+        <nav aria-label="Услуги">
+          <p class="font-semibold text-white">Услуги</p>
+          <NuxtLink to="/organizaciya-pohoron-mariupol" class="mt-2 flex min-h-11 items-center text-[var(--color-primary-muted)] hover:text-white">Организация похорон</NuxtLink>
+          <NuxtLink to="/ritualnye-tovary-mariupol" class="flex min-h-11 items-center text-[var(--color-primary-muted)] hover:text-white">Ритуальные товары</NuxtLink>
+          <NuxtLink to="/ritualny-transport-mariupol" class="flex min-h-11 items-center text-[var(--color-primary-muted)] hover:text-white">Ритуальный транспорт</NuxtLink>
+          <NuxtLink to="/pamyatniki-mariupol" class="flex min-h-11 items-center text-[var(--color-primary-muted)] hover:text-white">Памятники</NuxtLink>
+        </nav>
         <nav aria-label="Дополнительная навигация">
           <p class="font-semibold text-white">Информация</p>
           <NuxtLink

@@ -1,5 +1,10 @@
 import type { ServicePage } from '@/types/content'
 
+export const monumentsPromotion = {
+  title: 'При заказе памятников, художественная резка в подарок!',
+  note: 'Акция действует до 01.10.2026',
+} as const
+
 export const servicePages: Record<string, ServicePage> = {
   'ritualnye-uslugi-mariupol': {
     id: 'ritualnye-uslugi',
@@ -163,7 +168,7 @@ export const servicePages: Record<string, ServicePage> = {
     locations: [
       {
         title: 'Магазин на Аэродромном',
-        address: 'Пер. Аэродромный, 48',
+        address: 'пер. Аэродромный, 48',
         phone: '+7 949 430-30-30',
         workingHours: 'Диспетчеры принимают звонки круглосуточно.',
         photoSrc: '/Aerodromniy-store.webp',
@@ -172,7 +177,7 @@ export const servicePages: Record<string, ServicePage> = {
       },
       {
         title: 'Магазин на Кальмиусской',
-        address: 'Ул. Кальмиусская, 143',
+        address: 'ул. Кальмиусская, 143',
         phone: '+7 949 430-30-30',
         workingHours: 'Диспетчеры принимают звонки круглосуточно.',
         photoSrc: '/kalmiuskaya-store.webp',
@@ -270,6 +275,15 @@ export const servicePages: Record<string, ServicePage> = {
         href: '/chto-delat-esli-umer-chelovek',
       },
     ],
+    relatedServices: {
+      title: 'Также может понадобиться',
+      description: 'Другие услуги, которые могут понадобиться при организации похорон в Мариуполе.',
+      items: [
+        { pageKey: 'ritualnye-tovary-mariupol', title: 'Ритуальные товары', description: 'Ритуальные принадлежности для подготовки к прощанию.', icon: 'clipboardCheck' },
+        { pageKey: 'ritualny-transport-mariupol', title: 'Ритуальный транспорт', description: 'Транспортное сопровождение похорон и перевозки.', icon: 'car' },
+        { pageKey: 'pamyatniki-mariupol', title: 'Памятники', description: 'Подбор, изготовление и установка памятников.', icon: 'landmark' },
+      ],
+    },
     breadcrumbs: [
       { label: 'Главная', href: '/' },
       { label: 'Организация похорон' },
@@ -389,7 +403,7 @@ export const servicePages: Record<string, ServicePage> = {
     ],
     geographyTitle: 'Перевозка умерших по Мариуполю и за пределы города',
     geographyDescription:
-      'Выполняем ритуальные перевозки по Мариуполю и помогаем организовать транспортировку за пределы города. Маршрут рассчитывается индивидуально с учетом расстояния и условий перевозки.',
+      'Выполняем ритуальные перевозки по Мариуполю и помогаем организовать транспортировку за пределы города. Маршрут рассчитывается индивидуально с учётом расстояния и условий перевозки.',
     geographyDirections: [
       'Мариуполь',
       'Сартана',
@@ -495,7 +509,7 @@ export const servicePages: Record<string, ServicePage> = {
         number: '03',
         title: 'Согласуем транспорт и стоимость',
         description:
-          'Подберем подходящий вариант транспорта и заранее согласуем условия поездки.',
+          'Подберём подходящий вариант транспорта и заранее согласуем условия поездки.',
         icon: 'clipboardCheck',
       },
       {
@@ -569,6 +583,15 @@ export const servicePages: Record<string, ServicePage> = {
         href: '/ritualnye-uslugi-mariupol',
       },
     ],
+    relatedServices: {
+      title: 'Также может понадобиться',
+      description: 'Другие услуги, которые могут понадобиться при организации похорон в Мариуполе.',
+      items: [
+        { pageKey: 'organizaciya-pohoron-mariupol', title: 'Организация похорон', description: 'Помощь в организации похорон и согласовании этапов.', icon: 'clipboardCheck' },
+        { pageKey: 'ritualnye-tovary-mariupol', title: 'Ритуальные товары', description: 'Ритуальные принадлежности для подготовки к прощанию.', icon: 'clipboardCheck' },
+        { pageKey: 'pamyatniki-mariupol', title: 'Памятники', description: 'Подбор, изготовление и установка памятников.', icon: 'landmark' },
+      ],
+    },
     breadcrumbs: [
       { label: 'Главная', href: '/' },
       { label: 'Ритуальный транспорт' },
@@ -1340,9 +1363,7 @@ export const servicePages: Record<string, ServicePage> = {
     secondaryActionLabel: 'Смотреть каталог',
     secondaryActionHref: '#catalog',
     promo: {
-      title:
-        'При заказе памятников, художественная резка в подарок!',
-      note: 'Акция действует до 01.10.2026',
+      ...monumentsPromotion,
     },
     eyebrow: 'Памятники и мемориальные решения',
     summary:
@@ -1393,6 +1414,15 @@ export const servicePages: Record<string, ServicePage> = {
         href: '/kontakty',
       },
     ],
+    relatedServices: {
+      title: 'Также может понадобиться',
+      description: 'Другие услуги, которые могут понадобиться при организации похорон в Мариуполе.',
+      items: [
+        { pageKey: 'organizaciya-pohoron-mariupol', title: 'Организация похорон', description: 'Помощь в организации похорон и согласовании этапов.', icon: 'clipboardCheck' },
+        { pageKey: 'ritualnye-tovary-mariupol', title: 'Ритуальные товары', description: 'Ритуальные принадлежности для подготовки к прощанию.', icon: 'clipboardCheck' },
+        { pageKey: 'ritualny-transport-mariupol', title: 'Ритуальный транспорт', description: 'Транспортное сопровождение похорон и перевозки.', icon: 'car' },
+      ],
+    },
     breadcrumbs: [
       { label: 'Главная', href: '/' },
       { label: 'Памятники' },
