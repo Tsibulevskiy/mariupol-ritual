@@ -2,7 +2,7 @@ import type { ServicePage } from '@/types/content'
 
 export const monumentsPromotion = {
   title: 'При заказе памятников, художественная резка в подарок!',
-  note: 'Акция действует до 01.10.2026',
+  note: 'Акция действует до 31.12.2026',
 } as const
 
 export const servicePages: Record<string, ServicePage> = {
