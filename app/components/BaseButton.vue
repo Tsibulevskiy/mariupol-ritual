@@ -46,6 +46,8 @@ const classes = computed(() => [
   <a
     v-else-if="href"
     :href="href"
+    :target="external ? '_blank' : undefined"
+    :rel="external ? 'noopener noreferrer' : undefined"
     :class="classes"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : undefined"

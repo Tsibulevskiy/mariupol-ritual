@@ -57,6 +57,8 @@ export default defineNuxtConfig({
       googleSiteVerification:
         process.env.NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
       gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || '',
+      contactTelegramUrl: process.env.NUXT_PUBLIC_CONTACT_TELEGRAM_URL || '',
+      contactMaxUrl: process.env.NUXT_PUBLIC_CONTACT_MAX_URL || '',
     },
   },
   modules: [

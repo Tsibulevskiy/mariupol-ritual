@@ -6,6 +6,7 @@
       <div class="grid grid-cols-2 gap-3">
         <CallButton label="Позвонить" full-width />
         <MessengerButton messenger="telegram" label="Telegram" full-width />
+        <MessengerButton messenger="max" label="MAX" full-width />
       </div>
     </BaseContainer>
   </div>

@@ -47,6 +47,7 @@ withDefaults(
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <CallButton :phone="phone" />
           <MessengerButton v-if="showTelegram" messenger="telegram" />
+          <MessengerButton messenger="max" />
         </div>
       </div>
     </BaseContainer>

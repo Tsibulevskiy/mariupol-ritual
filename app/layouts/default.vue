@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import ScrollToTopButton from '@/components/ScrollToTopButton.vue'
-
 const route = useRoute()
 const { data: banner } = await useFetch('/api/banner', {
   key: 'public-banner',
@@ -22,7 +20,6 @@ const { data: banner } = await useFetch('/api/banner', {
       </main>
       <AppFooter />
     </div>
-    <ScrollToTopButton />
-    <MobileContactBar />
+    <FloatingContactWidget />
   </div>
 </template>
