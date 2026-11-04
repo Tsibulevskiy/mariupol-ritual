@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const props = withDefaults(defineProps<{ grouped?: boolean }>(), {
+  grouped: false,
+})
+
 const isVisible = ref(false)
 
 const updateVisibility = () => {
@@ -31,7 +35,12 @@ onBeforeUnmount(() => {
     <button
       v-if="isVisible"
       type="button"
-      class="fixed right-4 bottom-24 z-40 inline-flex size-14 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white text-primary shadow-[0_10px_24px_rgba(12,30,50,0.14)] hover:bg-[var(--color-primary-soft)] lg:right-8 lg:bottom-8"
+      :class="[
+        props.grouped
+          ? 'relative right-auto bottom-auto z-auto size-12 min-h-0 lg:size-14'
+          : 'fixed right-4 bottom-24 z-40 size-14 lg:right-8 lg:bottom-8',
+        'inline-flex items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white text-primary shadow-[0_10px_24px_rgba(12,30,50,0.14)] hover:bg-[var(--color-primary-soft)]',
+      ]"
       aria-label="Вернуться наверх"
       @click="scrollToTop"
     >

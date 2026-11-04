@@ -96,17 +96,17 @@ useSchemaOrg([
                   </a>
                 </dd>
               </div>
-              <div>
+              <div v-if="runtimeConfig.public.contactTelegramUrl">
                 <dt class="font-semibold">Telegram</dt>
                 <dd>
                   <a
-                    :href="createTelegramLink(contacts.telegram)"
+                    :href="runtimeConfig.public.contactTelegramUrl"
                     class="inline-flex min-h-11 items-center text-primary"
                     aria-label="Написать в Telegram"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    @{{ contacts.telegram.replace(/^@/, '') }}
+                    Написать в Telegram
                   </a>
                 </dd>
               </div>
@@ -137,6 +137,7 @@ useSchemaOrg([
             <div class="mt-8 flex flex-col gap-3 sm:flex-row">
               <CallButton />
               <MessengerButton messenger="telegram" />
+              <MessengerButton messenger="max" />
               <MessengerButton messenger="whatsapp" />
             </div>
           </BaseCard>
